@@ -1,23 +1,20 @@
 const fs = require("fs");
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
 
-// This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
 const speechTranslationConfig = sdk.SpeechTranslationConfig.fromSubscription(process.env.SPEECH_KEY, process.env.SPEECH_REGION);
 speechTranslationConfig.speechRecognitionLanguage = "en-US";
 
-var language = "it";
+var language = "es"; // Modify to Spanish
 speechTranslationConfig.addTargetLanguage(language);
 
-function fromFile() {
+function fromFile(callback) {
     let audioConfig = sdk.AudioConfig.fromWavFileInput(fs.readFileSync("Crane.wav"));
     let translationRecognizer = new sdk.TranslationRecognizer(speechTranslationConfig, audioConfig);
 
     translationRecognizer.recognizeOnceAsync(result => {
         switch (result.reason) {
             case sdk.ResultReason.TranslatedSpeech:
-                console.log(`RECOGNIZED: Text=${result.text}`);
-                console.log("Translated into [" + language + "]: " + result.translations.get(language));
-
+                callback(result.translations.get(language));
                 break;
             case sdk.ResultReason.NoMatch:
                 console.log("NOMATCH: Speech could not be recognized.");
@@ -36,4 +33,5 @@ function fromFile() {
         translationRecognizer.close();
     });
 }
-fromFile();
+
+module.exports = fromFile;
