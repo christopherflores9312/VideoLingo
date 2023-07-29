@@ -7,8 +7,8 @@ speechTranslationConfig.speechRecognitionLanguage = "en-US";
 var language = "es"; // Modify to Spanish
 speechTranslationConfig.addTargetLanguage(language);
 
-function fromFile(callback) {
-    let audioConfig = sdk.AudioConfig.fromWavFileInput(fs.readFileSync("audio.wav"));
+function fromFile(audioFile, callback) {
+    let audioConfig = sdk.AudioConfig.fromWavFileInput(fs.readFileSync(audioFile));
     let translationRecognizer = new sdk.TranslationRecognizer(speechTranslationConfig, audioConfig);
 
     translationRecognizer.recognizeOnceAsync(result => {
