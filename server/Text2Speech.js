@@ -4,7 +4,7 @@ var sdk = require("microsoft-cognitiveservices-speech-sdk");
 
 var subscriptionKey = process.env.SPEECH_KEY;
 var serviceRegion = process.env.SPEECH_REGION;
-var filename = "YourAudioFile.wav";
+var filename = "output/YourAudioFile.wav";
 
 function textToSpeech(text, callback) {
     var audioConfig = sdk.AudioConfig.fromAudioFileOutput(filename);

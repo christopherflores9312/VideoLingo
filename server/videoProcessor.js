@@ -3,7 +3,7 @@ const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 
 function downloadVideo(url, callback) {
-    const videoPath = 'myvideo.mp4';
+    const videoPath = 'output/myvideo.mp4';
 
     youtubedl(url, {
         'output': videoPath,
@@ -20,16 +20,16 @@ function downloadVideo(url, callback) {
 
 function extractAudio(videoFile, callback) {
     ffmpeg(videoFile)
-        .output('audio.wav')
+        .output('output/audio.wav')
         .on('end', function() {
             console.log('Finished extracting audio!');
-            callback('audio.wav');
+            callback('output/audio.wav');
         })
         .run();
 }
 
 function addAudioToVideo(videoFile, audioFile, callback) {
-    const outputPath = 'output.mp4';
+    const outputPath = 'output/output.mp4';
   
     ffmpeg(videoFile)
         .input(audioFile)
