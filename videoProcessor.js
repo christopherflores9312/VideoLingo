@@ -28,7 +28,23 @@ function extractAudio(videoFile, callback) {
         .run();
 }
 
+function addAudioToVideo(videoFile, audioFile, callback) {
+    const outputPath = 'output.mp4';
+  
+    ffmpeg(videoFile)
+        .input(audioFile)
+        .outputOptions(['-map 0:v', '-map 1:a', '-c:v copy'])
+        .save(outputPath)
+        .on('end', function() {
+            console.log('Finished processing video!');
+            callback(outputPath);
+        });
+}
+
+
+
 module.exports = {
     downloadVideo: downloadVideo,
-    extractAudio: extractAudio
+    extractAudio: extractAudio,
+    addAudioToVideo: addAudioToVideo
 };
