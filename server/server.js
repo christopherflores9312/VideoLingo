@@ -9,7 +9,7 @@ app.use(express.json());
 app.use('/video', videoRoutes);
 
 app.get('/download', function(req, res){
-    const file = `output.mp4`;
+    const file = `./output/output.mp4`;
     res.download(file); // Set disposition and send it.
   });
 
