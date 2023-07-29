@@ -8,7 +8,7 @@ var language = "es"; // Modify to Spanish
 speechTranslationConfig.addTargetLanguage(language);
 
 function fromFile(callback) {
-    let audioConfig = sdk.AudioConfig.fromWavFileInput(fs.readFileSync("Crane.wav"));
+    let audioConfig = sdk.AudioConfig.fromWavFileInput(fs.readFileSync("audio.wav"));
     let translationRecognizer = new sdk.TranslationRecognizer(speechTranslationConfig, audioConfig);
 
     translationRecognizer.recognizeOnceAsync(result => {
