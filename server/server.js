@@ -3,6 +3,8 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const videoRoutes = require('./routes/video');
+const schema = require('./schema'); // import the schema
+
 
 app.use(cors());
 app.use(express.json());
