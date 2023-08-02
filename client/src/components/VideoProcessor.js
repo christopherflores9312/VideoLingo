@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Button, TextField } from '@mui/material';
 
 function VideoProcessor() {
     const [url, setUrl] = useState('');
@@ -17,10 +18,34 @@ function VideoProcessor() {
 
     return (
         <div>
-            <input type="text" value={url} onChange={e => setUrl(e.target.value)} />
-            <button onClick={processVideo}>Process Video</button>
-            {video && <a href="http://localhost:5000/download" download>Download Video</a>}
+            <TextField 
+                fullWidth
+                label="Video URL"
+                variant="outlined"
+                value={url}
+                onChange={e => setUrl(e.target.value)}
+                style={{ marginBottom: 10 }}
+            />
+            
+            <Button 
+                variant="contained" 
+                color="primary" 
+                style={{ marginRight: 10 }}
+                onClick={processVideo}
+            >
+                Process Video
+            </Button>
 
+            {video && 
+                <Button 
+                    variant="contained" 
+                    color="default"
+                    href="http://localhost:5000/download" 
+                    download
+                >
+                    Download Video
+                </Button>
+            }
         </div>
     );
 }
