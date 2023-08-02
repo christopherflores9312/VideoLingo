@@ -4,7 +4,7 @@ import { Button, TextField } from '@mui/material';
 import { PROCESS_VIDEO } from '../utils/mutations';
 import LinearProgress from '@mui/material/LinearProgress';
 
-function VideoProcessor({ onProcessVideo }) {  // Changed setVideoUrl to onProcessVideo
+function VideoProcessor({ onProcessVideo, video }) {  // Changed setVideoUrl to onProcessVideo
     const [url, setUrl] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -45,6 +45,17 @@ function VideoProcessor({ onProcessVideo }) {  // Changed setVideoUrl to onProce
             >
                 Process Video
             </Button>
+            
+            {video &&
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    href={`http://localhost:5000/download/${video}`}
+                    download
+                >
+                    Download Video
+                </Button>
+            }
             {loading && <LinearProgress />} {/* Show the loading bar if loading is true */}
         </div>
     );

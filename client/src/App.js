@@ -21,7 +21,7 @@ function App() {
         
         <YouTubeCard />
         <br />
-        <VideoProcessor onProcessVideo={setVideo} />
+        <VideoProcessor onProcessVideo={setVideo} video={video} />
         {video && <VideoPlayerCard videoSrc={`http://localhost:5000/download/${video}`} />}
 
         </div>
