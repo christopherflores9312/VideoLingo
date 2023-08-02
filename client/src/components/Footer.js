@@ -1,12 +1,26 @@
 import React from 'react';
+import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 
 function Footer() {
-    return (
-        <footer className="mt-5 p-3 bg-dark text-white text-center">
-            <a href="https://github.com/christopherflores9312/VideoLingo.git" className="mr-3">GitHub</a>
-            <a href="https://www.linkedin.com" className="mr-3">LinkedIn</a>
-            <a href="https://www.facebook.com/">Facebook</a>
-        </footer>
-    );
+  return (
+    <Container component="footer" maxWidth="lg" style={{ marginTop: '40px', paddingBottom: '20px', textAlign: 'center' }}>
+      <Typography variant="body1">
+        <Link href="https://github.com/christopherflores9312/VideoLingo.git" color="textPrimary">
+          GitHub
+        </Link>
+        {" | "}
+        <Link href="https://www.linkedin.com" color="textPrimary">
+          LinkedIn
+        </Link>
+        {" | "}
+        <Link href="https://www.facebook.com/" color="textPrimary">
+          Facebook
+        </Link>
+      </Typography>
+    </Container>
+  );
 }
+
 export default Footer;

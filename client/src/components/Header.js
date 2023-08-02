@@ -1,12 +1,20 @@
 import React from 'react';
 import Navigation from './Navigation';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 
 function Header() {
-    return (
-        <header className="p-3 bg-dark text-white">
-            <h1 className="mb-0">Video Lingo</h1>
-            <Navigation />
-        </header>
-    );
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h6" style={{ flexGrow: 1 }}>
+          Video Lingo
+        </Typography>
+        <Navigation />
+      </Toolbar>
+    </AppBar>
+  );
 }
+
 export default Header;
