@@ -9,7 +9,7 @@ function VideoProcessor() {
 
     const processVideo = () => {
         const variables = { url };
-    
+
         axios.post('http://localhost:5000/graphql', { query: PROCESS_VIDEO, variables })
             .then(response => {
                 const video = response.data.data.processVideo;
@@ -22,7 +22,7 @@ function VideoProcessor() {
 
     return (
         <div>
-            <TextField 
+            <TextField
                 fullWidth
                 label="Video URL"
                 variant="outlined"
@@ -30,21 +30,21 @@ function VideoProcessor() {
                 onChange={e => setUrl(e.target.value)}
                 style={{ marginBottom: 10 }}
             />
-            
-            <Button 
-                variant="contained" 
-                color="primary" 
+
+            <Button
+                variant="contained"
+                color="primary"
                 style={{ marginRight: 10 }}
                 onClick={processVideo}
             >
                 Process Video
             </Button>
 
-            {video && 
-                <Button 
-                    variant="contained" 
-                    color="default"
-                    href=`http://localhost:5000/download/${video}` 
+            {video &&
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    href={`http://localhost:5000/download/${video}`}
                     download
                 >
                     Download Video
