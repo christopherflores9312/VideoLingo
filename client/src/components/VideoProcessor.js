@@ -3,17 +3,16 @@ import axios from 'axios';
 import { Button, TextField } from '@mui/material';
 import { PROCESS_VIDEO } from '../utils/mutations';
 
-function VideoProcessor() {
+function VideoProcessor({ onProcessVideo }) {  // Changed setVideoUrl to onProcessVideo
     const [url, setUrl] = useState('');
-    const [video, setVideo] = useState(null);
 
     const processVideo = () => {
         const variables = { url };
 
         axios.post('http://localhost:5000/graphql', { query: PROCESS_VIDEO, variables })
             .then(response => {
-                const video = response.data.data.processVideo;
-                setVideo(video.url);
+                const videoUrl = response.data.data.processVideo.url;
+                onProcessVideo(videoUrl);  // Changed setVideoUrl to onProcessVideo
             })
             .catch(error => {
                 console.error(error);
@@ -39,17 +38,6 @@ function VideoProcessor() {
             >
                 Process Video
             </Button>
-
-            {video &&
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    href={`http://localhost:5000/download/${video}`}
-                    download
-                >
-                    Download Video
-                </Button>
-            }
         </div>
     );
 }

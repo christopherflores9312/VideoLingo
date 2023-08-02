@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import Header from './components/Header';
 import Navigation from './components/Navigation'; 
@@ -10,22 +10,24 @@ import YouTubeCard from './components/YouTube';
 import VideoPlayerCard from './components/VideoPlayerCard';
 
 function App() {
+  const [video, setVideo] = useState(null);
+
   return (
-  <Container component="main" maxWidth="lg">
-      <CssBaseline />  {/* Normalize CSS */}
-      <Header />
-      <div className="App-content">
-      
-      
-      <YouTubeCard />
-      <br />
-      <VideoProcessor />
-      <VideoPlayerCard videoSrc="./server/output/output.mp4" />
+    <Container component="main" maxWidth="lg">
+        <CssBaseline />  {/* Normalize CSS */}
+        <Header />
+        <div className="App-content">
+        
+        
+        <YouTubeCard />
+        <br />
+        <VideoProcessor onProcessVideo={setVideo} />
+        {video && <VideoPlayerCard videoSrc={`http://localhost:5000/download/${video}`} />}
 
-      </div>
+        </div>
 
-      <Footer />
-    </Container>
+        <Footer />
+      </Container>
   );
 }
 
