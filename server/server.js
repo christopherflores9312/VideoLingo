@@ -5,7 +5,6 @@ const fs = require('fs');
 const { graphqlHTTP } = require('express-graphql');
 const app = express();
 const PORT = process.env.PORT || 5000;
-const videoRoutes = require('./routes/video');
 const schema = require('./schemas/schema'); // import the schema
 const resolvers = require('./schemas/resolvers');
 
