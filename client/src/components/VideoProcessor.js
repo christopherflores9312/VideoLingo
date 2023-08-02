@@ -2,20 +2,26 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Button, TextField } from '@mui/material';
 import { PROCESS_VIDEO } from '../utils/mutations';
+import LinearProgress from '@mui/material/LinearProgress';
 
 function VideoProcessor({ onProcessVideo }) {  // Changed setVideoUrl to onProcessVideo
     const [url, setUrl] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const processVideo = () => {
         const variables = { url };
-
+        setLoading(true);  // Start the loading
+        
         axios.post('http://localhost:5000/graphql', { query: PROCESS_VIDEO, variables })
             .then(response => {
                 const videoUrl = response.data.data.processVideo.url;
                 onProcessVideo(videoUrl);  // Changed setVideoUrl to onProcessVideo
+                setLoading(false);  // Stop the loading
+
             })
             .catch(error => {
                 console.error(error);
+                setLoading(false);  // Stop the loading in case of error
             });
     }
 
@@ -35,9 +41,11 @@ function VideoProcessor({ onProcessVideo }) {  // Changed setVideoUrl to onProce
                 color="primary"
                 style={{ marginRight: 10 }}
                 onClick={processVideo}
+                disabled={loading}  // Disable the button when loading
             >
                 Process Video
             </Button>
+            {loading && <LinearProgress />} {/* Show the loading bar if loading is true */}
         </div>
     );
 }
