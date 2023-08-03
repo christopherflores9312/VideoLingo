@@ -39,17 +39,15 @@ function extractAudio(videoFile) {
     });
 }
 
-function addAudioToVideo(videoFile, audioFile) {
+function addAudioToVideo(videoFile, audioFile, filename) {
     return new Promise((resolve, reject) => {
-        const outputPath = 'output/output.mp4';
-
         ffmpeg(videoFile)
             .input(audioFile)
             .outputOptions(['-map 0:v', '-map 1:a', '-c:v copy'])
-            .save(outputPath)
+            .save(`output/${filename}`)
             .on('end', function () {
                 console.log('Finished processing video!');
-                resolve(outputPath);
+                resolve(`output/${filename}`);
             })
             .on('error', function (err) {
                 console.error('Error occurred: ' + err.message);

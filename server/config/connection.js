@@ -1,19 +1,9 @@
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 
-// Connection URL
-const url = 'mongodb://localhost:27017';
-
-// Database Name
-const dbName = 'videolingo';
+// Connection string
+const uri = 'mongodb+srv://cflores:Titan9312@cluster0.hiwdvce.mongodb.net/videolingo?retryWrites=true&w=majority';
 
 // Create a new MongoClient
-const client = new MongoClient(url);
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// Use connect method to connect to the server
-client.connect(function(err) {
-  console.log("Connected successfully to server");
-
-  const db = client.db(dbName);
-
-  client.close();
-});
+module.exports = client;
