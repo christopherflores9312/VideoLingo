@@ -2,6 +2,7 @@ const videoProcessor = require('../videoProcessor');
 const speechTranslation = require('../SpeechTranslation');
 const textToSpeech = require('../Text2Speech');
 const { v4: uuidv4 } = require('uuid');
+const Video = require('../models/Video'); // Import the Video model
 
 const processVideo = async ({ url }) => {
   try {
@@ -14,8 +15,10 @@ const processVideo = async ({ url }) => {
     const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio, uniqueFilename); // pass uniqueFilename to addAudioToVideo function
     
     const videoUrl = `${uniqueFilename}`;
-    
-    // TODO: Save the final video file with the unique filename
+
+    // Create a new Video document and save it to MongoDB
+    const video = new Video({ url: videoUrl });
+    await video.save();
 
     return { url: videoUrl };
   } catch (err) {
@@ -24,12 +27,11 @@ const processVideo = async ({ url }) => {
   }
 };
 
-
 const resolvers = {
   processVideo,
-  videos: () => {
-    const collection = client.db(dbName).collection('videos');
-    return collection.find().toArray();
+  // Use the Video model to get all videos from MongoDB
+  videos: async () => {
+    return await Video.find();
   }
 };
 
