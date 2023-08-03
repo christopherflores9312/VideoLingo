@@ -7,6 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const schema = require('./schemas/schema'); // import the schema
 const resolvers = require('./schemas/resolvers');
+const client = require('./config/connection');
 
 
 app.use(cors());
@@ -16,6 +17,14 @@ app.use('/graphql', graphqlHTTP({
   rootValue: resolvers,
   graphiql: true, // Set to false if you don't want graphiql enabled
 }));
+
+client.connect(err => {
+  if (err) {
+    console.error(`Failed to connect to MongoDB: ${err}`);
+  } else {
+    console.log('Connected to MongoDB');
+  }
+});
 
 app.get('/download/:video', (req, res) => {
   const video = req.params.video;

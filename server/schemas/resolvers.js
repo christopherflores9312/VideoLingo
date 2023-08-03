@@ -9,10 +9,11 @@ const processVideo = async ({ url }) => {
     const audioFile = await videoProcessor.extractAudio(videoFile);
     const translatedText = await speechTranslation(audioFile);
     const translatedAudio = await textToSpeech(translatedText);
-    const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio);
     
     const uniqueFilename = uuidv4() + '.mp4'; // Use UUID to generate a unique filename
-    const videoUrl = `/download/${uniqueFilename}`;
+    const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio, uniqueFilename); // pass uniqueFilename to addAudioToVideo function
+    
+    const videoUrl = `${uniqueFilename}`;
     
     // TODO: Save the final video file with the unique filename
 
@@ -22,6 +23,7 @@ const processVideo = async ({ url }) => {
     throw err;
   }
 };
+
 
 const resolvers = {
   processVideo,
