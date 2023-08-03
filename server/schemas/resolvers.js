@@ -1,27 +1,30 @@
 const videoProcessor = require('../videoProcessor');
 const speechTranslation = require('../SpeechTranslation');
 const textToSpeech = require('../Text2Speech');
+const { v4: uuidv4 } = require('uuid');
+
+const processVideo = async ({ url }) => {
+  try {
+    const videoFile = await videoProcessor.downloadVideo(url);
+    const audioFile = await videoProcessor.extractAudio(videoFile);
+    const translatedText = await speechTranslation(audioFile);
+    const translatedAudio = await textToSpeech(translatedText);
+    const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio);
+    
+    const uniqueFilename = uuidv4() + '.mp4'; // Use UUID to generate a unique filename
+    const videoUrl = `/download/${uniqueFilename}`;
+    
+    // TODO: Save the final video file with the unique filename
+
+    return { url: videoUrl };
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
 
 const resolvers = {
-  processVideo: ({ url }) => {
-    return new Promise((resolve, reject) => {
-      videoProcessor.downloadVideo(url, function(videoFile) {
-        videoProcessor.extractAudio(videoFile, function(audioFile) {
-          speechTranslation(audioFile, function(translatedText) {
-            textToSpeech(translatedText, function(translatedAudio) {
-              videoProcessor.addAudioToVideo(videoFile, translatedAudio, function(finalVideo) {
-                // Generate a URL for the output file
-                const videoUrl = `output.mp4`;
-
-                // Resolve with the URL
-                resolve({ url: videoUrl });
-              });
-            });
-          });
-        });
-      });
-    });
-  },  
+  processVideo,
   videos: () => {
     const collection = client.db(dbName).collection('videos');
     return collection.find().toArray();
