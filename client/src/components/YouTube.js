@@ -9,7 +9,7 @@ function YouTubeCard() {
 
   const handleSearch = async () => {
     const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${searchTerm}&key=${API_KEY}`
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${searchTerm}&type=video&videoDuration=short&key=${API_KEY}`
     );
     const data = await response.json();
     setVideoList(data.items);
