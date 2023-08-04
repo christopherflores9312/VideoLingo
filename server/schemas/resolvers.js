@@ -18,7 +18,7 @@ const processVideo = async ({ url }) => {
         const videoUrl = `${uniqueFilename}`;
 
         // Create a new Video document and save it to MongoDB
-        const video = new Video({ url: videoUrl });
+        const video = new Video({ url: url });
         await video.save();
 
         // Cleanup intermediate files
