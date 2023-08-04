@@ -8,6 +8,7 @@ const typeDefs = gql`
   type User {
     id: ID!
     username: String!
+    email: String!
   }
 
   type Auth {
@@ -21,7 +22,7 @@ const typeDefs = gql`
 
   type Mutation {
     processVideo(url: String!): Video
-    signup(username: String!, password: String!): User
+    signup(username: String!, password: String!, email: String!): User  
     login(username: String!, password: String!): Auth
   }
 `;
