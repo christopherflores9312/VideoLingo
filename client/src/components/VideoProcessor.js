@@ -12,7 +12,7 @@ function VideoProcessor({ onProcessVideo, video }) {  // Changed setVideoUrl to 
         const variables = { url };
         setLoading(true);  // Start the loading
         
-        axios.post('http://localhost:5000/graphql', { query: PROCESS_VIDEO, variables })
+        axios.post('http://localhost:5001/graphql', { query: PROCESS_VIDEO, variables })
             .then(response => {
                 const videoUrl = response.data.data.processVideo.url;
                 onProcessVideo(videoUrl);  // Changed setVideoUrl to onProcessVideo
@@ -50,7 +50,7 @@ function VideoProcessor({ onProcessVideo, video }) {  // Changed setVideoUrl to 
                 <Button
                     variant="contained"
                     color="secondary"
-                    href={`http://localhost:5000/download/${video}`}
+                    href={`http://localhost:5001/download/${video}`}
                     download
                 >
                     Download Video
