@@ -4,6 +4,9 @@ const textToSpeech = require('../utils/Text2Speech');
 const { v4: uuidv4 } = require('uuid');
 const Video = require('../models/Video'); // Import the Video model
 const cleanupFiles = require('../utils/cleanupFiles');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/Users'); // Import the User model
 
 const resolvers = {
     Query: {
@@ -37,6 +40,35 @@ const resolvers = {
                 console.error(err);
                 throw err;
             }
+        },
+        signup: async (_, { username, password }) => {
+            // Hash the password
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            // Create a new user
+            const user = new User({ username, password: hashedPassword });
+            await user.save();
+
+            return user;
+        },
+
+        login: async (_, { username, password }) => {
+            // Find the user
+            const user = await User.findOne({ username });
+            if (!user) {
+                throw new Error('Invalid login credentials');
+            }
+
+            // Check the password
+            const valid = await bcrypt.compare(password, user.password);
+            if (!valid) {
+                throw new Error('Invalid login credentials');
+            }
+
+            // Create a JWT
+            const token = jwt.sign({ id: user.id }, '9312');
+
+            return { token, user };
         }
     }
 };
