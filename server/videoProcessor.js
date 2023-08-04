@@ -1,10 +1,12 @@
 const youtubedl = require('youtube-dl-exec');
 const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 
 function downloadVideo(url) {
     return new Promise((resolve, reject) => {
-        const videoPath = 'output/myvideo.mp4';
+        const uniqueId = uuidv4();
+        const videoPath = `output/${uniqueId}_video.mp4`;
 
         youtubedl(url, {
             'output': videoPath,
@@ -12,7 +14,7 @@ function downloadVideo(url) {
         })
             .then(() => {
                 console.log('Finished downloading!');
-                resolve(videoPath);
+                resolve({ path: videoPath, id: uniqueId });
             })
             .catch(error => {
                 console.error(error);
@@ -21,11 +23,11 @@ function downloadVideo(url) {
     });
 }
 
-function extractAudio(videoFile) {
+function extractAudio(videoData) {
     return new Promise((resolve, reject) => {
-        const audioOutput = 'output/audio.wav';
+        const audioOutput = `output/${videoData.id}_audio.wav`;
 
-        ffmpeg(videoFile)
+        ffmpeg(videoData.path)
             .output(audioOutput)
             .on('end', function () {
                 console.log('Finished extracting audio!');
@@ -39,9 +41,9 @@ function extractAudio(videoFile) {
     });
 }
 
-function addAudioToVideo(videoFile, audioFile, filename) {
+function addAudioToVideo(videoData, audioFile, filename) {
     return new Promise((resolve, reject) => {
-        ffmpeg(videoFile)
+        ffmpeg(videoData.path)
             .input(audioFile)
             .outputOptions(['-map 0:v', '-map 1:a', '-c:v copy'])
             .save(`output/${filename}`)
