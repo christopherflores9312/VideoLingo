@@ -1,15 +1,31 @@
 import React from 'react';
+import { useMutation, gql } from '@apollo/client';
 import { useFormik } from 'formik';
 
+const SIGNUP_MUTATION = gql`
+  mutation Signup($username: String!, $password: String!, $email: String!) {
+    signup(username: $username, password: $password, email: $email) {
+      id
+      username
+    }
+  }
+`;
+
 const Signup = () => {
+    const [signup, { data }] = useMutation(SIGNUP_MUTATION);
+
     const formik = useFormik({
         initialValues: {
             username: '',
             password: '',
         },
-        onSubmit: values => {
-            // TODO: Implement the signup logic here
-            console.log(values);
+        onSubmit: async (values) => {
+            try {
+                const response = await signup({ variables: values });
+                console.log(response.data.signup);  // This will log the returned user data
+            } catch (error) {
+                console.error(error);  // This will log any error from the mutation
+            }
         },
     });
 
