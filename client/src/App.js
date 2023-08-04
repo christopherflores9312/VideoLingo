@@ -22,7 +22,7 @@ function App() {
         <YouTubeCard />
         <br />
         <VideoProcessor onProcessVideo={setVideo} video={video} />
-        {video && <VideoPlayerCard videoSrc={`http://localhost:5000/download/${video}`} />}
+        {video && <VideoPlayerCard videoSrc={`http://localhost:5001/download/${video}`} />}
 
         </div>
 
