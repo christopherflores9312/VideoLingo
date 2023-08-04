@@ -2,40 +2,44 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, TextField, Button } from '@mui/material';
 
 function YouTubeCard() {
-  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [videoList, setVideoList] = useState([]);
 
-  function getYoutubeVideoId(url) {
-    const match = url.match(/v=([a-zA-Z0-9_-]{11})/);
-    return match ? match[1] : null;
-  }
+  const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
+
+  const handleSearch = async () => {
+    const response = await fetch(
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${searchTerm}&type=video&videoDuration=short&key=${API_KEY}`
+    );
+    const data = await response.json();
+    setVideoList(data.items);
+  };
 
   return (
     <Card>
       <CardHeader title="Search YouTube" />
       <CardContent>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          style={{ marginBottom: 10 }}
-          onClick={() => {
-            window.open(`https://www.youtube.com/`, '_blank');
-          }}
-        >
-          Open YouTube
+        <TextField
+          label="Search"
+          variant="outlined"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <Button variant="contained" color="primary" onClick={handleSearch}>
+          Search
         </Button>
-        
-        
-        {youtubeUrl && 
-          <iframe 
-            width="100%" 
-            height="315" 
-            src={`https://www.youtube.com/embed/${getYoutubeVideoId(youtubeUrl)}`} 
-            title="YouTube video player" 
-            frameBorder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        {videoList.map((video) => (
+          <iframe
+            key={video.id.videoId}
+            width="100%"
+            height="315"
+            src={`https://www.youtube.com/embed/${video.id.videoId}`}
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen>
           </iframe>
-        }
+        ))}
       </CardContent>
     </Card>
   );
