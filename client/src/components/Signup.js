@@ -17,6 +17,13 @@ const Signup = () => {
         <form onSubmit={formik.handleSubmit}>
             <label htmlFor="username">Username</label>
             <input
+                id="email"
+                name="email"
+                type="email"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+            />
+            <input
                 id="username"
                 name="username"
                 type="text"

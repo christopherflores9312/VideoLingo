@@ -41,17 +41,16 @@ const resolvers = {
                 throw err;
             }
         },
-        signup: async (_, { username, password }) => {
+        signup: async (_, { username, password, email }) => {
             // Hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
-
+          
             // Create a new user
-            const user = new User({ username, password: hashedPassword });
+            const user = new User({ username, password: hashedPassword, email });
             await user.save();
-
+          
             return user;
-        },
-
+          },    
         login: async (_, { username, password }) => {
             // Find the user
             const user = await User.findOne({ username });
