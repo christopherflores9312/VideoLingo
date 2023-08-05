@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { useFormik } from 'formik';
 import { AuthContext } from './AuthContext';  // Import AuthContext
+import { useNavigate } from 'react-router-dom';
 
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
@@ -18,6 +19,8 @@ const LOGIN_MUTATION = gql`
 const Login = () => {
     const [loginMutation, { data }] = useMutation(LOGIN_MUTATION);
     const { signIn } = useContext(AuthContext);  // Get signIn function from AuthContext
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -25,15 +28,22 @@ const Login = () => {
             password: '',
         },
         onSubmit: async (values) => {
+            setLoading(true);  // Set loading to true before calling signIn
             try {
                 const response = await loginMutation({ variables: values });
                 console.log(response.data.login);
-                signIn(null, null, response.data.login.token);  // Store JWT in AuthContext and local storage
+                const { success } = await signIn(null, null, response.data.login.token);  // Store JWT in AuthContext and local storage
+                if (success) {
+                    navigate('/process');  // Navigate to /process after successful sign in
+                }
             } catch (error) {
                 console.error(error);
+            } finally {
+                setLoading(false);  // Set loading to false after signIn is done
             }
         },
     });
+
 
     return (
         <form onSubmit={formik.handleSubmit}>
@@ -53,7 +63,7 @@ const Login = () => {
                 onChange={formik.handleChange}
                 value={formik.values.password}
             />
-            <button type="submit">Submit</button>
+            <button type="submit" disabled={loading}>Submit</button>
         </form>
     );
 };
