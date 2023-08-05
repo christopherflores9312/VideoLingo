@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const Video = require('../models/Video'); // Import the Video model
 const cleanupFiles = require('../utils/cleanupFiles');
 
-const processVideo = async ({ url }) => {
+const processVideo = async ({ url, name }) => {
     try {
         const videoFile = await videoProcessor.downloadVideo(url);
         const audioFile = await videoProcessor.extractAudio(videoFile);
@@ -18,7 +18,7 @@ const processVideo = async ({ url }) => {
         const videoUrl = `${uniqueFilename}`;
 
         // Create a new Video document and save it to MongoDB
-        const video = new Video({ url: videoUrl });
+        const video = new Video({ url: url, name: name });
         await video.save();
 
         // Cleanup intermediate files

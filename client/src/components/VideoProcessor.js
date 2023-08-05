@@ -4,29 +4,37 @@ import { Button, TextField } from '@mui/material';
 import { PROCESS_VIDEO } from '../utils/mutations';
 import LinearProgress from '@mui/material/LinearProgress';
 
-function VideoProcessor({ onProcessVideo, video }) {  // Changed setVideoUrl to onProcessVideo
+function VideoProcessor({ onProcessVideo, video }) {
     const [url, setUrl] = useState('');
+    const [videoName, setVideoName] = useState(''); // New state for video name
     const [loading, setLoading] = useState(false);
 
     const processVideo = () => {
-        const variables = { url };
-        setLoading(true);  // Start the loading
+        const variables = { url, name: videoName };  // Include video name
+        setLoading(true);
         
         axios.post('http://localhost:5001/graphql', { query: PROCESS_VIDEO, variables })
             .then(response => {
                 const videoUrl = response.data.data.processVideo.url;
-                onProcessVideo(videoUrl);  // Changed setVideoUrl to onProcessVideo
-                setLoading(false);  // Stop the loading
-
+                onProcessVideo(videoUrl);
+                setLoading(false);
             })
             .catch(error => {
                 console.error(error);
-                setLoading(false);  // Stop the loading in case of error
+                setLoading(false);
             });
     }
 
     return (
         <div>
+            <TextField
+                fullWidth
+                label="Video Name"
+                variant="outlined"
+                value={videoName}
+                onChange={e => setVideoName(e.target.value)}
+                style={{ marginBottom: 10 }}
+            />
             <TextField
                 fullWidth
                 label="Video URL"
@@ -41,7 +49,7 @@ function VideoProcessor({ onProcessVideo, video }) {  // Changed setVideoUrl to 
                 color="primary"
                 style={{ marginRight: 10 }}
                 onClick={processVideo}
-                disabled={loading}  // Disable the button when loading
+                disabled={loading}
             >
                 Process Video
             </Button>
@@ -56,7 +64,7 @@ function VideoProcessor({ onProcessVideo, video }) {  // Changed setVideoUrl to 
                     Download Video
                 </Button>
             }
-            {loading && <LinearProgress />} {/* Show the loading bar if loading is true */}
+            {loading && <LinearProgress />}
         </div>
     );
 }
