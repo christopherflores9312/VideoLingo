@@ -28,7 +28,7 @@ const Login = () => {
             try {
                 const response = await loginMutation({ variables: values });
                 console.log(response.data.login);
-                signIn(response.data.login.token);  // Store JWT in AuthContext and local storage
+                signIn(null, null, response.data.login.token);  // Store JWT in AuthContext and local storage
             } catch (error) {
                 console.error(error);
             }
