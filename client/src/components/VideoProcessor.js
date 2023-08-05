@@ -28,7 +28,6 @@ function VideoProcessor({ onProcessVideo, video }) {  // Changed setVideoUrl to 
 
     return (
         <div>
-            <YouTube /> 
             <TextField
                 fullWidth
                 label="Video URL"
