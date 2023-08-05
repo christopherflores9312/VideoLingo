@@ -36,11 +36,12 @@ export const AuthProvider = ({ children }) => {
   });
 
   const client = useApolloClient();
-  const signIn = useCallback(async (username, password, token) => {
+  const signIn = useCallback(async (username, password, token, user) => {
     if (token) {
       // Store the token directly
       setAuthToken(token);
       localStorage.setItem('authToken', token);
+      setUser(user);
       // Fetch the user info using the token
       const { data } = await client.query({
         query: VERIFY_USER_QUERY,
@@ -51,19 +52,25 @@ export const AuthProvider = ({ children }) => {
       // Perform the login mutation
       try {
         const { data } = await login({ variables: { username, password } });
-        const { token, user } = data.login;
-    
-        setUser(user);
+        const { token } = data.login;
+
         setAuthToken(token);
         localStorage.setItem('authToken', token);
-    
+
+        // Fetch the user info using the token
+        const userInfo = await client.query({
+          query: VERIFY_USER_QUERY,
+          variables: { token },
+        });
+        setUser(userInfo.data.verifyUser);
+
         return { success: true };
       } catch (error) {
         return { success: false, message: error.message };
       }
     }
   }, [login, client]);
-  
+
 
   const logout = () => {
     setAuthToken(null);

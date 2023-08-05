@@ -29,7 +29,7 @@ const Signup = () => {
             try {
                 const response = await signupMutation({ variables: values });
                 console.log(response.data.signup);
-                signIn(null, null, response.data.signup.token);  // Store JWT in AuthContext and local storage
+                signIn(null, null, response.data.signup.token, response.data.signup.user);
             } catch (error) {
                 console.error(error);
             }
