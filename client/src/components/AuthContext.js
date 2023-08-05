@@ -1,95 +1,79 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
-import { useMutation, useQuery, gql } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 import { useApolloClient } from '@apollo/client';
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [authToken, setAuthToken] = useState(() => localStorage.getItem('authToken'));
-  const [user, setUser] = useState(null);
-
-  const LOGIN_MUTATION = gql`
-    mutation Login($username: String!, $password: String!) {
-      login(username: $username, password: $password) {
-        token
-        user {
-          id
-          username
-        }
-      }
+const VERIFY_USER_QUERY = gql`
+  query VerifyUser($token: String!) {
+    verifyUser(token: $token) {
+      id
+      username
     }
-  `;
+  }
+`;
 
-  const VERIFY_USER_QUERY = gql`
-    query VerifyUser($token: String!) {
-      verifyUser(token: $token) {
+const LOGIN_MUTATION = gql`
+  mutation Login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      token
+      user {
         id
         username
       }
     }
-  `;
+  }
+`;
 
-  const [login] = useMutation(LOGIN_MUTATION);
-  const { loading, data, error } = useQuery(VERIFY_USER_QUERY, {
-    variables: { token: authToken },
-    skip: !authToken,
-  });
-
+export const AuthProvider = ({ children }) => {
+  const [authToken, setAuthToken] = useState(() => localStorage.getItem('authToken'));
+  const [user, setUser] = useState(null);
   const client = useApolloClient();
-  const signIn = useCallback(async (username, password, token, user) => {
+  const [login] = useMutation(LOGIN_MUTATION);
+
+  const initializeAuth = useCallback(async () => {
+    if (authToken) {
+      try {
+        const { data } = await client.query({
+          query: VERIFY_USER_QUERY,
+          variables: { token: authToken },
+        });
+        setUser(data.verifyUser);
+        console.log('User set in initializeAuth:', data.verifyUser);
+      } catch (error) {
+        console.error('Error in initializeAuth:', error.message);
+        // Clear the token if it's invalid
+        setAuthToken(null);
+        localStorage.removeItem('authToken');
+      }
+    }
+  }, [authToken, client]);
+  
+
+  const signIn = useCallback(async (username, password, token) => {
     if (token) {
-      // Store the token directly
       setAuthToken(token);
       localStorage.setItem('authToken', token);
-      setUser(user);
-      // Fetch the user info using the token
-      const { data } = await client.query({
-        query: VERIFY_USER_QUERY,
-        variables: { token },
-      });
     } else {
-      // Perform the login mutation
       try {
         const { data } = await login({ variables: { username, password } });
-        console.log('Login data:', data);  // Add console log here
-
         const { token } = data.login;
-
         setAuthToken(token);
         localStorage.setItem('authToken', token);
-
-        // Fetch the user info using the token
-        const userInfo = await client.query({
-          query: VERIFY_USER_QUERY,
-          variables: { token },
-        });
-        console.log('User info:', userInfo.data);  // Add console log here
-
-        setUser(userInfo.data.verifyUser);
-        console.log('User after signIn:', userInfo.data.verifyUser);
-
-
-        return { success: true };
       } catch (error) {
+        console.error(error);
         return { success: false, message: error.message };
       }
     }
-  }, [login, client]);
-
+    await initializeAuth(); // Call initializeAuth after signIn
+    return { success: true };
+  }, [login, initializeAuth]); // Add initializeAuth as dependency
 
   const logout = () => {
     setAuthToken(null);
     setUser(null);
     localStorage.removeItem('authToken');
   };
-
-  const initializeAuth = useCallback(() => {
-    if (!loading && data && !error) {
-      setUser(data.verifyUser);
-      console.log('User after initializeAuth:', data.verifyUser);
-
-    }
-  }, [loading, data, error]);
 
   useEffect(() => {
     initializeAuth();
