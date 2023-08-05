@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import logo from './logo.svg';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import VideoProcessor from './components/VideoProcessor';
@@ -22,14 +21,16 @@ function App() {
         <Header />
         <div className="App-content">
           <Routes>
-            <Route path="/login" component={Login} />  {/* Add a route for login */}
-            <Route path="/signup" component={Signup} />  {/* Add a route for signup */}
-            <ProtectedRoute path="/process">  {/* Add a protected route for processing the video */}
-              <YouTubeCard />
-              <br />
-              <VideoProcessor onProcessVideo={setVideo} video={video} />
-              {video && <VideoPlayerCard videoSrc={`http://localhost:5001/download/${video}`} />}
-            </ProtectedRoute>
+            <Route path="/login" element={<Login />} />  {/* Add a route for login */}
+            <Route path="/signup" element={<Signup />} />  {/* Add a route for signup */}
+            <Route path="/process" element={
+              <ProtectedRoute>
+                <YouTubeCard />
+                <br />
+                <VideoProcessor onProcessVideo={setVideo} video={video} />
+                {video && <VideoPlayerCard videoSrc={`http://localhost:5001/download/${video}`} />}
+              </ProtectedRoute>
+            } />
           </Routes>
         </div>
         <Footer />
