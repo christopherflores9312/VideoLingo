@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient';
-import { AuthProvider } from './AuthContext';  // Import AuthProvider
+import { AuthProvider } from './components/AuthContext';  // Import AuthProvider
 
 
 
