@@ -12,7 +12,6 @@ import Signup from './components/Signup';  // Import Signup component
 import { AuthProvider, AuthContext } from './components/AuthContext';
 import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient';
-import DebugUser from './components/DebugUser';
 
 function App() {
   return (

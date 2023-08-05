@@ -4,7 +4,6 @@ import { Button, TextField } from '@mui/material';
 import { PROCESS_VIDEO } from '../utils/mutations';
 import LinearProgress from '@mui/material/LinearProgress';
 import YouTube from './YouTube';
-import DebugUser from './DebugUser';
 
 function VideoProcessor({ onProcessVideo, video }) {  // Changed setVideoUrl to onProcessVideo
     const [url, setUrl] = useState('');
@@ -29,7 +28,6 @@ function VideoProcessor({ onProcessVideo, video }) {  // Changed setVideoUrl to 
 
     return (
         <div>
-            <DebugUser />
             <YouTube /> 
             <TextField
                 fullWidth
