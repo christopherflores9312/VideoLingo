@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { useFormik } from 'formik';
+import { AuthContext } from './AuthContext';  // Import AuthContext
 
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
@@ -15,7 +16,8 @@ const LOGIN_MUTATION = gql`
 `;
 
 const Login = () => {
-    const [login, { data }] = useMutation(LOGIN_MUTATION);  // Add this line
+    const [loginMutation, { data }] = useMutation(LOGIN_MUTATION);
+    const { login } = useContext(AuthContext);  // Get login function from AuthContext
 
     const formik = useFormik({
         initialValues: {
@@ -24,12 +26,11 @@ const Login = () => {
         },
         onSubmit: async (values) => {
             try {
-                const response = await login({ variables: values });
-                console.log(response.data.login);  // This will log the returned user data
-                // Save the JWT to local storage
-                localStorage.setItem('authToken', response.data.login.token);
+                const response = await loginMutation({ variables: values });
+                console.log(response.data.login);
+                login(response.data.login.token);  // Store JWT in AuthContext and local storage
             } catch (error) {
-                console.error(error);  // This will log any error from the mutation
+                console.error(error);
             }
         },
     });
