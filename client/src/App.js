@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import logo from './logo.svg';
 import Header from './components/Header';
-import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import VideoProcessor from './components/VideoProcessor';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import YouTubeCard from './components/YouTube';
 import VideoPlayerCard from './components/VideoPlayerCard';
-import ProtectedRoute from './ProtectedRoute';  // Import ProtectedRoute
+import ProtectedRoute from './components/ProtectedRoute';  // Import ProtectedRoute
 import Login from './components/Login';  // Import Login component
 import Signup from './components/Signup';  // Import Signup component
 
