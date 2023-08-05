@@ -1,7 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { useFormik } from 'formik';
 import { AuthContext } from './AuthContext';  // Import AuthContext
+import { useNavigate } from 'react-router-dom';  // Import useNavigate
+
 
 const SIGNUP_MUTATION = gql`
   mutation Signup($username: String!, $password: String!, $email: String!) {
@@ -18,6 +20,8 @@ const SIGNUP_MUTATION = gql`
 const Signup = () => {
     const [signupMutation, { data }] = useMutation(SIGNUP_MUTATION);
     const { signIn } = useContext(AuthContext);  // Get login function from AuthContext
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();  // Get navigate function
 
     const formik = useFormik({
         initialValues: {
@@ -26,14 +30,20 @@ const Signup = () => {
             email: '',
         },
         onSubmit: async (values) => {
+            setLoading(true);  // Set loading to true before calling signIn
             try {
                 const response = await signupMutation({ variables: values });
                 console.log(response.data.signup);
-                signIn(null, null, response.data.signup.token, response.data.signup.user);
+                const { success } = await signIn(null, null, response.data.signup.token);  // Store JWT in AuthContext and local storage
+                if (success) {
+                    navigate('/process');  // Navigate to /process after successful sign up
+                }
             } catch (error) {
                 console.error(error);
+            } finally {
+                setLoading(false);  // Set loading to false after signIn is done
             }
-        },        
+        },
     });
 
     return (
@@ -62,7 +72,7 @@ const Signup = () => {
                 onChange={formik.handleChange}
                 value={formik.values.password}
             />
-            <button type="submit">Submit</button>
+            <button type="submit" disabled={loading}>Submit</button>
         </form>
     );
 };
