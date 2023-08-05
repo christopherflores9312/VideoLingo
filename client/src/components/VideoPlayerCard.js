@@ -1,10 +1,12 @@
 import React from 'react';
 import { Card, CardContent, CardHeader } from '@mui/material';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import DebugUser from './DebugUser';
 
 function VideoPlayerCard({ videoSrc }) {
   return (
     <Card>
+      <DebugUser />
       <CardHeader
         title="Processed Video"
         action={

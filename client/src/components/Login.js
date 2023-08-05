@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { useFormik } from 'formik';
 import { AuthContext } from './AuthContext';  // Import AuthContext
+import DebugUser from './DebugUser';  // Import DebugUser component
 
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
@@ -37,6 +38,7 @@ const Login = () => {
 
     return (
         <form onSubmit={formik.handleSubmit}>
+            <DebugUser />
             <label htmlFor="username">Username</label>
             <input
                 id="username"

@@ -28,6 +28,7 @@ const LOGIN_MUTATION = gql`
 export const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(() => localStorage.getItem('authToken'));
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);  // Add loading state
   const client = useApolloClient();
   const [login] = useMutation(LOGIN_MUTATION);
 
@@ -41,14 +42,11 @@ export const AuthProvider = ({ children }) => {
         setUser(data.verifyUser);
         console.log('User set in initializeAuth:', data.verifyUser);
       } catch (error) {
-        console.error('Error in initializeAuth:', error.message);
-        // Clear the token if it's invalid
-        setAuthToken(null);
-        localStorage.removeItem('authToken');
+        console.error('Error in initializeAuth:', error);
       }
     }
+    setLoading(false);  // Set loading to false when done
   }, [authToken, client]);
-  
 
   const signIn = useCallback(async (username, password, token) => {
     if (token) {
@@ -80,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   }, [initializeAuth]);
 
   return (
-    <AuthContext.Provider value={{ authToken, user, signIn, logout }}>
+    <AuthContext.Provider value={{ authToken, user, signIn, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

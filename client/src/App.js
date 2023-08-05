@@ -38,28 +38,30 @@ function App() {
 }
 
 const ProtectedContent = () => {
-  const context = useContext(AuthContext);
-  console.log('Context in ProtectedContent:', context);
-
-  const { user } = context;
+  const { user, loading } = useContext(AuthContext);
   const [video, setVideo] = useState(null);
+  console.log('User in ProtectedContent:', user);
 
+  // If still loading, show a loading spinner or other placeholder
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
+  // If user is null, redirect to /login
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // If user is not null, show the protected content
   return (
     <>
-      <DebugUser /> {/* Add DebugUser here */}
-      {user ? (
-        <>
-          <YouTubeCard />
-          <br />
-          <VideoProcessor onProcessVideo={setVideo} video={video} />
-          {video && <VideoPlayerCard videoSrc={`http://localhost:5001/download/${video}`} />}
-        </>
-      ) : (
-        <Navigate to="/login" replace />
-      )}
+      <YouTubeCard />
+      <br />
+      <VideoProcessor onProcessVideo={setVideo} video={video} />
+      {video && <VideoPlayerCard videoSrc={`http://localhost:5001/download/${video}`} />}
     </>
   );
 };
+
 
 export default App;
