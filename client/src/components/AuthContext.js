@@ -43,6 +43,9 @@ export const AuthProvider = ({ children }) => {
         console.log('User set in initializeAuth:', data.verifyUser);
       } catch (error) {
         console.error('Error in initializeAuth:', error);
+        // Clear the token if it's invalid
+        setAuthToken(null);
+        localStorage.removeItem('authToken');
       }
     }
     setLoading(false);  // Set loading to false when done
