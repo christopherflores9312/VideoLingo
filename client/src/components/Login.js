@@ -17,7 +17,7 @@ const LOGIN_MUTATION = gql`
 
 const Login = () => {
     const [loginMutation, { data }] = useMutation(LOGIN_MUTATION);
-    const { login } = useContext(AuthContext);  // Get login function from AuthContext
+    const { signIn } = useContext(AuthContext);  // Get signIn function from AuthContext
 
     const formik = useFormik({
         initialValues: {
@@ -28,7 +28,7 @@ const Login = () => {
             try {
                 const response = await loginMutation({ variables: values });
                 console.log(response.data.login);
-                login(response.data.login.token);  // Store JWT in AuthContext and local storage
+                signIn(response.data.login.token);  // Store JWT in AuthContext and local storage
             } catch (error) {
                 console.error(error);
             }

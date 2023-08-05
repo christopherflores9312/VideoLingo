@@ -18,11 +18,12 @@ const typeDefs = gql`
 
   type Query {
     videos: [Video]
+    verifyUser(token: String!): User
   }
 
   type Mutation {
     processVideo(url: String!): Video
-    signup(username: String!, password: String!, email: String!): User  
+    signup(username: String!, password: String!, email: String!): Auth
     login(username: String!, password: String!): Auth
   }
 `;

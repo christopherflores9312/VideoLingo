@@ -1,4 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
+import { useMutation, useQuery, gql } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 
 export const AuthContext = createContext();
 
@@ -6,11 +8,62 @@ export const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(() => localStorage.getItem('authToken'));
   const [user, setUser] = useState(null);
 
-  const signIn = useCallback(async (username, password) => {
-    // Here should be your authentication logic.
-    // For now, let's suppose that it's a success and set the user.
-    setUser({ username });
-  }, []);
+  const LOGIN_MUTATION = gql`
+    mutation Login($username: String!, $password: String!) {
+      login(username: $username, password: $password) {
+        token
+        user {
+          id
+          username
+        }
+      }
+    }
+  `;
+
+  const VERIFY_USER_QUERY = gql`
+    query VerifyUser($token: String!) {
+      verifyUser(token: $token) {
+        id
+        username
+      }
+    }
+  `;
+
+  const [login] = useMutation(LOGIN_MUTATION);
+  const { loading, data, error } = useQuery(VERIFY_USER_QUERY, {
+    variables: { token: authToken },
+    skip: !authToken,
+  });
+
+  const client = useApolloClient();
+  const signIn = useCallback(async (username, password, token) => {
+    if (token) {
+      // Store the token directly
+      setAuthToken(token);
+      localStorage.setItem('authToken', token);
+      // Fetch the user info using the token
+      const { data } = await client.query({
+        query: VERIFY_USER_QUERY,
+        variables: { token },
+      });
+      setUser(data.verifyUser);
+    } else {
+      // Perform the login mutation
+      try {
+        const { data } = await login({ variables: { username, password } });
+        const { token, user } = data.login;
+    
+        setUser(user);
+        setAuthToken(token);
+        localStorage.setItem('authToken', token);
+    
+        return { success: true };
+      } catch (error) {
+        return { success: false, message: error.message };
+      }
+    }
+  }, [login, client]);
+  
 
   const logout = () => {
     setAuthToken(null);
@@ -19,16 +72,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const initializeAuth = useCallback(() => {
-    // Check for a valid token in local storage
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      // Here you need to verify the token and fetch the user info
-      // For now, let's suppose that it's a success and set the user.
-      setUser({ username: 'test' });
+    if (!loading && data && !error) {
+      setUser(data.verifyUser);
     }
-  }, []);
+  }, [loading, data, error]);
 
-  // Initialize auth when the application loads
   useEffect(() => {
     initializeAuth();
   }, [initializeAuth]);

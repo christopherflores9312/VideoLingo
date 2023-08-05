@@ -12,6 +12,25 @@ const resolvers = {
     Query: {
         videos: async () => {
             return await Video.find();
+        },
+        verifyUser: async (_, { token }) => {
+            try {
+                // Verify the JWT token
+                const decoded = jwt.verify(token, '9312');  // '9312' should be your secret key
+                
+                // Find the user
+                const user = await User.findById(decoded.id);
+
+                // If user not found, throw an error
+                if (!user) {
+                    throw new Error('Invalid token');
+                }
+
+                return user;
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
         }
     },
     Mutation: {
@@ -49,7 +68,10 @@ const resolvers = {
             const user = new User({ username, password: hashedPassword, email });
             await user.save();
           
-            return user;
+            // Create a JWT
+            const token = jwt.sign({ id: user.id }, '9312');
+          
+            return { token, user };
           },    
         login: async (_, { username, password }) => {
             // Find the user
