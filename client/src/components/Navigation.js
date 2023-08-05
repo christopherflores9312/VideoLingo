@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 function Navigation({ setCurrentSection }) {
   return (
     <div>
-      {['About Video Lingo', 'My Video Library', 'Contact Us'].map(section => (
+      {['Home', 'About Video Lingo', 'My Video Library', 'Contact Us'].map(section => (
         <Button 
           key={section}
           onClick={() => setCurrentSection(section)}

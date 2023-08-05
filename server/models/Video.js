@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const videoSchema = new mongoose.Schema({
   url: String,
-  // Add additional fields as needed
+  name: String,  // New field for video name
 });
 
 const Video = mongoose.model('Video', videoSchema);

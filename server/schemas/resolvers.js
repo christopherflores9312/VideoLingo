@@ -7,7 +7,6 @@ const cleanupFiles = require('../utils/cleanupFiles');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/Users'); // Import the User model
-
 const resolvers = {
     Query: {
         videos: async () => {
