@@ -17,9 +17,13 @@ const resolvers = {
             try {
                 // Verify the JWT token
                 const decoded = jwt.verify(token, '9312');  // '9312' should be your secret key
+                console.log('Decoded JWT:', decoded);  // Log the decoded JWT
+
                 
                 // Find the user
                 const user = await User.findById(decoded.id);
+                console.log('User fetched from DB:', user);  // Log the fetched user
+
 
                 // If user not found, throw an error
                 if (!user) {

@@ -47,11 +47,12 @@ export const AuthProvider = ({ children }) => {
         query: VERIFY_USER_QUERY,
         variables: { token },
       });
-      setUser(data.verifyUser);
     } else {
       // Perform the login mutation
       try {
         const { data } = await login({ variables: { username, password } });
+        console.log('Login data:', data);  // Add console log here
+
         const { token } = data.login;
 
         setAuthToken(token);
@@ -62,7 +63,11 @@ export const AuthProvider = ({ children }) => {
           query: VERIFY_USER_QUERY,
           variables: { token },
         });
+        console.log('User info:', userInfo.data);  // Add console log here
+
         setUser(userInfo.data.verifyUser);
+        console.log('User after signIn:', userInfo.data.verifyUser);
+
 
         return { success: true };
       } catch (error) {
@@ -81,6 +86,8 @@ export const AuthProvider = ({ children }) => {
   const initializeAuth = useCallback(() => {
     if (!loading && data && !error) {
       setUser(data.verifyUser);
+      console.log('User after initializeAuth:', data.verifyUser);
+
     }
   }, [loading, data, error]);
 
