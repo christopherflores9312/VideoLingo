@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useState, useContext } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Header from './components/Header';
-import Navigation from './components/Navigation'; 
 import Footer from './components/Footer';
 import VideoProcessor from './components/VideoProcessor';
 import Container from '@mui/material/Container';
@@ -11,45 +10,53 @@ import VideoPlayerCard from './components/VideoPlayerCard';
 import VideoLibrary from './components/VideoLibrary'; // New import
 
 function App() {
-  const [video, setVideo] = useState(null);
-  const [currentSection, setCurrentSection] = useState("Home"); // Default to "Home"
-  const [initialUrl, setInitialUrl] = useState(null);
-
-  useEffect(() => {
-    // Extract video URL from the path, if present
-    const pathParts = window.location.pathname.split('/');
-    if (pathParts[1] === 'home' && pathParts.length > 2) {
-      setInitialUrl(decodeURIComponent(pathParts[2]));
-      setCurrentSection('Home');
-    }
-  }, []);
-
   return (
-    <Container component="main" maxWidth="lg">
-        <CssBaseline />  {/* Normalize CSS */}
-        <Header setCurrentSection={setCurrentSection} />
-       
-        <div className="App-content">
-        
-            {
-                currentSection === "Home" && (
-                    <>
-                        <YouTubeCard />
-                        <br />
-                        <VideoProcessor onProcessVideo={setVideo} video={video} initialUrl={initialUrl} />
-                        {video && <VideoPlayerCard videoSrc={`http://localhost:5001/download/${video}`} />}
-                    </>
-                )
-            }
-
-            {
-                currentSection === "My Video Library" && <VideoLibrary />
-            }
-
-        </div>
-        <Footer />
-    </Container>
+    <ApolloProvider client={client}>
+      <AuthProvider>
+        <Router>
+          <Container component="main" maxWidth="lg">
+            <CssBaseline />
+            <Header />
+            <div className="App-content">
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/process" element={<ProtectedContent />} />
+              </Routes>
+            </div>
+            <Footer />
+          </Container>
+        </Router>
+      </AuthProvider>
+    </ApolloProvider>
   );
 }
+
+const ProtectedContent = () => {
+  const { user, loading } = useContext(AuthContext);
+  const [video, setVideo] = useState(null);
+  console.log('User in ProtectedContent:', user);
+
+  // If still loading, show a loading spinner or other placeholder
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // If user is null, redirect to /login
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // If user is not null, show the protected content
+  return (
+    <>
+      <YouTubeCard />
+      <br />
+      <VideoProcessor onProcessVideo={setVideo} video={video} />
+      {video && <VideoPlayerCard videoSrc={`http://localhost:5001/download/${video}`} />}
+    </>
+  );
+};
+
 
 export default App;
