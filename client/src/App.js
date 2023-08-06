@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import VideoProcessor from './components/VideoProcessor';
@@ -24,7 +24,7 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      <AuthProvider>
+      <AuthProvider handleClose={handleClose}>
         <Router>
           <Container component="main" maxWidth="lg">
             <CssBaseline />
@@ -36,8 +36,8 @@ function App() {
             </AuthContext.Consumer>
             <div className="App-content">
               <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login handleClose={handleClose} />} />
+                <Route path="/signup" element={<Signup handleClose={handleClose} />} />
                 <Route path="/process" element={<ProtectedContent showDialog={setIsAuthDialogOpen} />} />
               </Routes>
             </div>

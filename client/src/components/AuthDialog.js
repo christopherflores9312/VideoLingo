@@ -12,7 +12,7 @@ const AuthDialog = ({ open, handleClose, user }) => {
 
   return (
     <Dialog open={open} onClose={user ? handleClose : null}>
-      {isLogin ? <Login /> : <Signup />}
+      {isLogin ? <Login handleClose={handleClose} /> : <Signup handleClose={handleClose} />}
       <button onClick={switchForm}>
         Switch to {isLogin ? 'Signup' : 'Login'}
       </button>

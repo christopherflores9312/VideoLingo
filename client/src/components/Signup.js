@@ -17,11 +17,19 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
-const Signup = () => {
+const Signup = ({ handleClose }) => {
+    const { signUp } = useContext(AuthContext);
     const [signupMutation, { data }] = useMutation(SIGNUP_MUTATION);
     const { signIn } = useContext(AuthContext);  // Get login function from AuthContext
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();  // Get navigate function
+
+    const handleSignUp = async (username, password) => {
+        const { success } = await signUp(username, password);
+        if (success) {
+          handleClose();
+        }
+      };
 
     const formik = useFormik({
         initialValues: {
