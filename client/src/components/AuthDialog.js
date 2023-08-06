@@ -20,7 +20,7 @@ const AuthDialog = ({ open, handleClose, user }) => {
         {isLogin ? <Login handleClose={handleClose} /> : <Signup handleClose={handleClose} />}
       </DialogContent>
       <Button color="primary" onClick={switchForm}>
-        Switch to {isLogin ? 'Sign Up' : 'Login'}
+         {isLogin ? 'Sign Up' : 'Login'}
       </Button>
     </Dialog>
   );
