@@ -37,7 +37,7 @@ const resolvers = {
         }
     },
     Mutation: {
-        processVideo: async (_, { url }) => {
+        processVideo: async (_, { url, name }) => {
             try {
                 const videoFile = await videoProcessor.downloadVideo(url);
                 const audioFile = await videoProcessor.extractAudio(videoFile);

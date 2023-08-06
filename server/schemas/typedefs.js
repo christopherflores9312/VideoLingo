@@ -22,7 +22,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    processVideo(url: String!): Video
+    processVideo(url: String!, name: String!): Video
     signup(username: String!, password: String!, email: String!): Auth
     login(username: String!, password: String!): Auth
   }
