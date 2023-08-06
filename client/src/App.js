@@ -13,10 +13,12 @@ import { AuthProvider, AuthContext } from './components/AuthContext';
 import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient';
 import AuthDialog from './components/AuthDialog';  // Import AuthDialog component
+import VideoLibrary from './components/VideoLibrary';  // Import VideoLibrary component
 
 
 function App() {
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+  const [currentSection, setCurrentSection] = useState('Home'); // Define the new state variable and function here
 
   const handleClose = () => {
     setIsAuthDialogOpen(false);
@@ -28,7 +30,7 @@ function App() {
         <Router>
           <Container component="main" maxWidth="lg">
             <CssBaseline />
-            <Header />
+            <Header setCurrentSection={setCurrentSection} /> {/* Pass the function as a prop here */}
             <AuthContext.Consumer>
               {({ user }) => (
                 <AuthDialog open={isAuthDialogOpen} handleClose={handleClose} user={user} />
@@ -38,8 +40,8 @@ function App() {
               <Routes>
                 <Route path="/login" element={<Login handleClose={handleClose} />} />
                 <Route path="/signup" element={<Signup handleClose={handleClose} />} />
-                <Route path="/process" element={<ProtectedContent showDialog={setIsAuthDialogOpen} />} />
-                <Route path="/" element={<ProtectedContent showDialog={setIsAuthDialogOpen} />} />
+                <Route path="/process" element={<ProtectedContent showDialog={setIsAuthDialogOpen} currentSection={currentSection} />} />
+<Route path="/" element={<ProtectedContent showDialog={setIsAuthDialogOpen} currentSection={currentSection} />} />
               </Routes>
             </div>
             <Footer />
@@ -52,7 +54,7 @@ function App() {
 
 
 
-const ProtectedContent = ({ showDialog }) => {
+const ProtectedContent = ({ showDialog, currentSection }) => {
   const { user, loading } = useContext(AuthContext);
   const [video, setVideo] = useState(null);
   console.log('User in ProtectedContent:', user);
@@ -67,6 +69,11 @@ const ProtectedContent = ({ showDialog }) => {
   // If still loading, show a loading spinner or other placeholder
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+   // Conditional rendering based on the currentSection
+   if (currentSection === 'My Video Library') {
+    return <VideoLibrary />;
   }
 
   // If user is not null, show the protected content
