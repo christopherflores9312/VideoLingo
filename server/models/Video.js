@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const videoSchema = new mongoose.Schema({
-  url: String,
-  name: String,  // New field for video name
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },  // Reference to the User model
-
+  url: String, // This will now store the original URL
+  name: String,
+  processedUrl: String, // New field to store the processed video's filename
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
 const Video = mongoose.model('Video', videoSchema);

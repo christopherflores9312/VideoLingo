@@ -4,6 +4,7 @@ const typeDefs = gql`
   type Video {
     url: String
     name: String
+    processedUrl: String
     user: ID
   }
 

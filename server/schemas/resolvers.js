@@ -52,14 +52,14 @@ const resolvers = {
                 const videoUrl = `${uniqueFilename}`;
     
                 // Create a new Video document and save it to MongoDB
-                const video = new Video({ url: url, name: name, user: userId });
+                const video = new Video({ url: videoUrl, name: name, user: userId,processedUrl: url });
                 console.log('Saving video document:', video); // Log the video document before saving it
                 await video.save();
     
                 // Cleanup intermediate files
                 await cleanupFiles([videoFile.path, audioFile, translatedAudio]);
     
-                return { url: url, name: name };
+                return { url: videoUrl, name: name, processedUrl: url  };
             } catch (err) {
                 console.error(err);
                 throw err;
