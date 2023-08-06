@@ -3,6 +3,8 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
   type Video {
     url: String
+    name: String
+    user: ID
   }
 
   type User {
@@ -22,10 +24,10 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    processVideo(url: String!, name: String!): Video
+    processVideo(url: String!, name: String!, userId: ID!): Video
     signup(username: String!, password: String!, email: String!): Auth
     login(username: String!, password: String!): Auth
-  }
+}
 `;
 
 module.exports = typeDefs;

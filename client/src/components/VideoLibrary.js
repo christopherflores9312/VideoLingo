@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { GET_VIDEOS } from '../utils/queries';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography, Button } from '@mui/material';
 
 function VideoLibrary() {
     const [videos, setVideos] = useState([]);
@@ -16,6 +16,10 @@ function VideoLibrary() {
             });
     }, []);
 
+    const viewVideo = (url) => {
+        window.location.href = `/home/${encodeURIComponent(url)}`;
+    };
+
     return (
         <div>
             {videos.map(video => (
@@ -23,6 +27,7 @@ function VideoLibrary() {
                     <CardContent>
                         <Typography variant="h5">{video.name}</Typography>
                         <Typography color="textSecondary">{video.url}</Typography>
+                        <Button onClick={() => viewVideo(video.url)}>View</Button>
                     </CardContent>
                 </Card>
             ))}
