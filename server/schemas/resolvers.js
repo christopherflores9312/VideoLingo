@@ -37,27 +37,29 @@ const resolvers = {
         }
     },
     Mutation: {
-        processVideo: async (_, { url, name }) => {
+        processVideo: async (_, { url, name, userId }) => {
             try {
+                console.log('Received processVideo request with arguments:', { url, name, userId }); // Log received arguments
+    
                 const videoFile = await videoProcessor.downloadVideo(url);
                 const audioFile = await videoProcessor.extractAudio(videoFile);
                 const translatedText = await speechTranslation(audioFile);
                 const translatedAudio = await textToSpeech(translatedText);
-
+    
                 const uniqueFilename = uuidv4() + '.mp4'; // Use UUID to generate a unique filename
                 const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio, uniqueFilename); // pass uniqueFilename to addAudioToVideo function
-
+    
                 const videoUrl = `${uniqueFilename}`;
-
+    
                 // Create a new Video document and save it to MongoDB
-                const video = new Video({ url: videoUrl });
+                const video = new Video({ url: url, name: name, user: userId });
+                console.log('Saving video document:', video); // Log the video document before saving it
                 await video.save();
-
+    
                 // Cleanup intermediate files
                 await cleanupFiles([videoFile.path, audioFile, translatedAudio]);
-
-
-                return { url: videoUrl };
+    
+                return { url: url, name: name };
             } catch (err) {
                 console.error(err);
                 throw err;

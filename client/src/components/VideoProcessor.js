@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Button, TextField } from '@mui/material';
 import { PROCESS_VIDEO } from '../utils/mutations';
 import LinearProgress from '@mui/material/LinearProgress';
 import YouTube from './YouTube';
+import { AuthContext } from './AuthContext'; // if you're using AuthContext.js
 
 function VideoProcessor({ onProcessVideo, video, initialUrl }) {
     const [url, setUrl] = useState('');
     const [videoName, setVideoName] = useState(''); // New state for video name
     const [loading, setLoading] = useState(false);
+
+    const { user } = useContext(AuthContext); // get the user from AuthContext
 
     useEffect(() => {
         if (initialUrl) {
@@ -18,12 +21,13 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
     }, [initialUrl]);
 
     const processVideo = (videoUrl = url) => {
-        const variables = { url: videoUrl, name: videoName };  // Include video name
+        const variables = { url: videoUrl, name: videoName, userId: user.id };  // Include userId
         setLoading(true);
-        
+        console.log('Sending video processing request with variables:', variables); //remember to remove
         axios.post('http://localhost:5001/graphql', { query: PROCESS_VIDEO, variables })
             .then(response => {
                 const videoUrl = response.data.data.processVideo.url;
+                console.log('Received server response:', response.data); //remember to remove
                 onProcessVideo(videoUrl);
                 setLoading(false);
             })
