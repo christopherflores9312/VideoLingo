@@ -6,7 +6,7 @@ function VideoPlayerCard({ videoSrc }) {
   return (
     <Card>
       <CardHeader
-        title="Processed Video"
+        title="Translated Video"
         action={
           <PlayCircleOutlineIcon />
         }

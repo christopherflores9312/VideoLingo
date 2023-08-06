@@ -62,7 +62,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
                 onClick={() => processVideo()}
                 disabled={loading}
             >
-                Process Video
+                Translate Video
             </Button>
             
             {video &&

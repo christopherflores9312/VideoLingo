@@ -72,10 +72,10 @@ const ProtectedContent = ({ showDialog }) => {
   // If user is not null, show the protected content
   return (
     <>
-      <YouTubeCard />
-      <br />
       <VideoProcessor onProcessVideo={setVideo} video={video} />
       {video && <VideoPlayerCard videoSrc={`http://localhost:5001/download/${video}`} />}
+      <br />
+      <YouTubeCard />
     </>
   );
 };
