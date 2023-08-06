@@ -3,6 +3,10 @@ import { useMutation, gql } from '@apollo/client';
 import { useFormik } from 'formik';
 import { AuthContext } from './AuthContext';  // Import AuthContext
 import { useNavigate } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
@@ -16,11 +20,18 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-const Login = () => {
+const Login = ({ handleClose }) => {
     const [loginMutation, { data }] = useMutation(LOGIN_MUTATION);
     const { signIn } = useContext(AuthContext);  // Get signIn function from AuthContext
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    const handleLogin = async (username, password) => {
+        const { success } = await signIn(username, password);
+        if (success) {
+          handleClose();
+        }
+      };
 
     const formik = useFormik({
         initialValues: {
@@ -46,26 +57,42 @@ const Login = () => {
 
 
     return (
-        <form onSubmit={formik.handleSubmit}>
-            <label htmlFor="username">Username</label>
-            <input
-                id="username"
-                name="username"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.username}
-            />
-            <label htmlFor="password">Password</label>
-            <input
-                id="password"
-                name="password"
-                type="password"
-                onChange={formik.handleChange}
-                value={formik.values.password}
-            />
-            <button type="submit" disabled={loading}>Submit</button>
-        </form>
-    );
-};
+        <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoFocus
+            onChange={formik.handleChange}
+            value={formik.values.username}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            onChange={formik.handleChange}
+            value={formik.values.password}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} /> : 'Submit'}
+          </Button>
+        </Box>
+      );
+    };
 
 export default Login;

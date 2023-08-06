@@ -25,7 +25,7 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children, handleClose}) => {
   const [authToken, setAuthToken] = useState(() => localStorage.getItem('authToken'));
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);  // Add loading state
@@ -67,13 +67,16 @@ export const AuthProvider = ({ children }) => {
       }
     }
     await initializeAuth(); // Call initializeAuth after signIn
+    handleClose(); // Close the dialog
     return { success: true };
-  }, [login, initializeAuth]); // Add initializeAuth as dependency
+  }, [login, initializeAuth, handleClose]); // Add initializeAuth as dependency
 
   const logout = () => {
     setAuthToken(null);
     setUser(null);
     localStorage.removeItem('authToken');
+    // Trigger a state change to force re-render
+    setLoading(true);
   };
 
   useEffect(() => {
