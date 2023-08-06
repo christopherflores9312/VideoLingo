@@ -39,6 +39,7 @@ function App() {
                 <Route path="/login" element={<Login handleClose={handleClose} />} />
                 <Route path="/signup" element={<Signup handleClose={handleClose} />} />
                 <Route path="/process" element={<ProtectedContent showDialog={setIsAuthDialogOpen} />} />
+                <Route path="/" element={<ProtectedContent showDialog={setIsAuthDialogOpen} />} />
               </Routes>
             </div>
             <Footer />
