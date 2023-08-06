@@ -74,6 +74,8 @@ export const AuthProvider = ({ children }) => {
     setAuthToken(null);
     setUser(null);
     localStorage.removeItem('authToken');
+    // Trigger a state change to force re-render
+    setLoading(true);
   };
 
   useEffect(() => {
