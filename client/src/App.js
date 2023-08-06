@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -12,8 +12,16 @@ import Signup from './components/Signup';  // Import Signup component
 import { AuthProvider, AuthContext } from './components/AuthContext';
 import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient';
+import AuthDialog from './components/AuthDialog';  // Import AuthDialog component
+
 
 function App() {
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+
+  const handleClose = () => {
+    setIsAuthDialogOpen(false);
+  };
+
   return (
     <ApolloProvider client={client}>
       <AuthProvider>
@@ -21,11 +29,16 @@ function App() {
           <Container component="main" maxWidth="lg">
             <CssBaseline />
             <Header />
+            <AuthContext.Consumer>
+              {({ user }) => (
+                <AuthDialog open={isAuthDialogOpen} handleClose={handleClose} user={user} />
+              )}
+            </AuthContext.Consumer>
             <div className="App-content">
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/process" element={<ProtectedContent />} />
+                <Route path="/process" element={<ProtectedContent showDialog={setIsAuthDialogOpen} />} />
               </Routes>
             </div>
             <Footer />
@@ -36,19 +49,23 @@ function App() {
   );
 }
 
-const ProtectedContent = () => {
+
+
+const ProtectedContent = ({ showDialog }) => {
   const { user, loading } = useContext(AuthContext);
   const [video, setVideo] = useState(null);
   console.log('User in ProtectedContent:', user);
 
+  useEffect(() => {
+    // If user is null, open the authentication dialog
+    if (!user) {
+      showDialog(true);
+    }
+  }, [user, showDialog]);
+
   // If still loading, show a loading spinner or other placeholder
   if (loading) {
     return <div>Loading...</div>;
-  }
-
-  // If user is null, redirect to /login
-  if (!user) {
-    return <Navigate to="/login" replace />;
   }
 
   // If user is not null, show the protected content
