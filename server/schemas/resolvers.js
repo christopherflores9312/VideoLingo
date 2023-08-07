@@ -7,6 +7,9 @@ const cleanupFiles = require('../utils/cleanupFiles');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/Users'); // Import the User model
+
+const currentDate = new Date().toISOString().slice(0, 10);
+
 const resolvers = {
     Query: {
         videos: async () => {
@@ -46,7 +49,7 @@ const resolvers = {
                 const translatedText = await speechTranslation(audioFile);
                 const translatedAudio = await textToSpeech(translatedText);
     
-                const uniqueFilename = uuidv4() + '.mp4'; // Use UUID to generate a unique filename
+                const uniqueFilename = `${name.replace(/[^a-z0-9]/gi, '_')}_${currentDate}.mp4`; // Use UUID to generate a unique filename
                 const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio, uniqueFilename); // pass uniqueFilename to addAudioToVideo function
     
                 const videoUrl = `${uniqueFilename}`;
