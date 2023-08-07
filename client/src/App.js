@@ -16,7 +16,7 @@ import AuthDialog from './components/AuthDialog';  // Import AuthDialog componen
 import VideoLibrary from './components/VideoLibrary';  // Import VideoLibrary component
 
 const SERVER_URL = process.env.NODE_ENV === 'production' 
-                   ? 'https://videolingo-4a86a4dabd29.herokuapp.com/' 
+                   ? 'https://videolingo-4a86a4dabd29.herokuapp.com' 
                    : 'http://localhost:5001';
 
 function App() {
