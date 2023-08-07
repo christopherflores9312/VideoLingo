@@ -7,6 +7,7 @@ const cleanupFiles = require('../utils/cleanupFiles');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/Users'); // Import the User model
+const fs = require('fs');
 
 const currentDate = new Date().toISOString().slice(0, 10);
 
@@ -101,12 +102,23 @@ const resolvers = {
         },
         deleteVideo: async (_, { id }) => {
             try {
-                const deletedVideo = await Video.findByIdAndDelete(id);
-                if (deletedVideo) {
-                    return { _id: deletedVideo._id };
-                } else {
+                const videoToDelete = await Video.findById(id);
+                
+                if (!videoToDelete) {
                     throw new Error("Video not found");
                 }
+                
+                // Construct the path to the video file
+                const videoPath = `output/${videoToDelete.translatedVideo}`;
+                
+                // Delete the video file from the filesystem
+                fs.unlinkSync(videoPath);  // Using synchronous unlink for simplicity
+        
+                // Delete the video entry from the database
+                await Video.findByIdAndDelete(id);
+                
+                return { _id: videoToDelete._id };
+        
             } catch (err) {
                 console.error(err);
                 throw err;
