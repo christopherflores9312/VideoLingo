@@ -7,8 +7,6 @@ function YouTubeCard() {
 
   const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
 
-  console.log("API_KEY Hello:", API_KEY);
-
   const handleSearch = async () => {
     const response = await fetch(
       `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=9&q=${searchTerm}&type=video&videoDuration=short&key=${API_KEY}`
