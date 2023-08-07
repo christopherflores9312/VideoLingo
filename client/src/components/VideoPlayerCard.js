@@ -6,17 +6,21 @@ function VideoPlayerCard({ videoSrc }) {
   return (
     <Card>
       <CardHeader
-        title="Processed Video"
-        action={
-          <PlayCircleOutlineIcon />
+        title={
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            Translated Video
+            <PlayCircleOutlineIcon style={{ marginLeft: '8px' }} />
+          </div>
         }
       />
-      <CardContent>
-        <video width="100%" controls>
+
+      <CardContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <video width="50%" controls>
           <source src={videoSrc} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </CardContent>
+
     </Card>
   );
 }

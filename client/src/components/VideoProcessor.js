@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Button, TextField } from '@mui/material';
 import { PROCESS_VIDEO } from '../utils/mutations';
 import LinearProgress from '@mui/material/LinearProgress';
-import YouTube from './YouTube';
 import { AuthContext } from './AuthContext'; // if you're using AuthContext.js
 
 function VideoProcessor({ onProcessVideo, video, initialUrl }) {
@@ -63,7 +62,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
                 onClick={() => processVideo()}
                 disabled={loading}
             >
-                Process Video
+                Translate Video
             </Button>
             
             {video &&
