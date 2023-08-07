@@ -19,6 +19,13 @@ const server = new ApolloServer({
   playground: true, // enables the Apollo Server's GraphQL playground
 });
 
+// Serve static files from the React build
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
+
 // route to download the video file from the server to the client
 app.get('/download/:video', (req, res) => {
   const video = req.params.video;
