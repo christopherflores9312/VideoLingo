@@ -16,18 +16,18 @@ function VideoLibrary() {
             });
     }, []);
 
-    const viewVideo = (url) => {
-        window.location.href = `/home/${encodeURIComponent(url)}`;
+    const viewVideo = (processedUrl) => {
+        window.location.href = `/home/${encodeURIComponent(processedUrl)}`;
     };
 
     return (
         <div>
             {videos.map(video => (
-                <Card key={video.url} style={{ margin: '10px' }}>
+                <Card key={video.processedUrl} style={{ margin: '10px' }}>
                     <CardContent>
                         <Typography variant="h5">{video.name}</Typography>
-                        <Typography color="textSecondary">{video.url}</Typography>
-                        <Button onClick={() => viewVideo(video.url)}>View</Button>
+                        <Typography color="textSecondary">{video.processedUrl}</Typography>
+                        <Button onClick={() => viewVideo(video.processedUrl)}>View</Button>
                     </CardContent>
                 </Card>
             ))}
