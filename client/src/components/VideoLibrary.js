@@ -16,11 +16,6 @@ function VideoLibrary() {
             });
     }, []);
 
-    const viewVideo = (translatedVideo) => {
-        const videoPath = `http://localhost:5001/download/${translatedVideo}`;
-        window.location.href = `/home/${encodeURIComponent(videoPath)}`;
-    };
-
     return (
         <div>
             {videos.map(video => (
@@ -28,7 +23,13 @@ function VideoLibrary() {
                     <CardContent>
                         <Typography variant="h5">{video.name}</Typography>
                         <Typography color="textSecondary">{video.url}</Typography> {/* Display the original YouTube URL */}
-                        <Button onClick={() => viewVideo(video.translatedVideo)}>View</Button>
+                        
+                        {/* Download button */}
+                        <a href={`http://localhost:5001/download/${video.translatedVideo}`} download>
+                            <Button variant="contained" color="primary">
+                                Download
+                            </Button>
+                        </a>
                     </CardContent>
                 </Card>
             ))}
