@@ -5,6 +5,10 @@ import { PROCESS_VIDEO } from '../utils/mutations';
 import LinearProgress from '@mui/material/LinearProgress';
 import { AuthContext } from './AuthContext'; // if you're using AuthContext.js
 
+const SERVER_URL = process.env.NODE_ENV === 'production' 
+                   ? 'https://videolingo-4a86a4dabd29.herokuapp.com/' 
+                   : 'http://localhost:5001';
+
 function VideoProcessor({ onProcessVideo, video, initialUrl }) {
     const [url, setUrl] = useState('');
     const [videoName, setVideoName] = useState(''); // New state for video name
@@ -23,7 +27,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
         const variables = { url: videoUrl, name: videoName, userId: user.id };  // Include userId
         setLoading(true);
         console.log('Sending video processing request with variables:', variables); //remember to remove
-        axios.post('http://localhost:5001/graphql', { query: PROCESS_VIDEO, variables })
+        axios.post(`${SERVER_URL}/graphql`, { query: PROCESS_VIDEO, variables })
             .then(response => {
                 const videoUrl = response.data.data.processVideo.url;
                 console.log('Received server response:', response.data); //remember to remove
@@ -69,7 +73,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
                 <Button
                     variant="contained"
                     color="secondary"
-                    href={`http://localhost:5001/download/${video}`}
+                    href={`${SERVER_URL}/${video}`}
                     download
                 >
                     Download Video
