@@ -43,27 +43,35 @@ const resolvers = {
     Mutation: {
         processVideo: async (_, { url, name, userId }) => {
             try {
-                console.log('Received processVideo request with arguments:', { url, name, userId }); // Log received arguments
-    
+                console.log('Received processVideo request with arguments:', { url, name, userId });
+
                 const videoFile = await videoProcessor.downloadVideo(url);
+                console.log('Video downloaded:', videoFile.path);
+
                 const audioFile = await videoProcessor.extractAudio(videoFile);
+                console.log('Audio extracted:', audioFile);
+
                 const translatedText = await speechTranslation(audioFile);
+                console.log('Speech translated:', translatedText);
+
                 const translatedAudio = await textToSpeech(translatedText);
-    
-                const uniqueFilename = `${name.replace(/[^a-z0-9]/gi, '_')}_${uuidv4()}_${currentDate}.mp4`; // Use UUID to generate a unique filename
-                const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio, uniqueFilename); // pass uniqueFilename to addAudioToVideo function
-    
+                console.log('Text to speech done:', translatedAudio);
+
+                const uniqueFilename = `${name.replace(/[^a-z0-9]/gi, '_')}_${uuidv4()}_${currentDate}.mp4`;
+                const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio, uniqueFilename);
+                console.log('Final video:', finalVideo);
+
                 const videoUrl = `${uniqueFilename}`;
-    
-                // Create a new Video document and save it to MongoDB
+
                 const video = new Video({ url: url, name: name, user: userId, translatedVideo: uniqueFilename });
-                console.log('Saving video document:', video); // Log the video document before saving it
+                console.log('Saving video document:', video);
                 await video.save();
-    
-                // Cleanup intermediate files
+
                 await cleanupFiles([videoFile.path, audioFile, translatedAudio]);
-    
-                return { url: videoUrl, name: name, processedUrl: url  };
+
+                const returnData = { url: videoUrl, name: name, processedUrl: url };
+                console.log('Returning data:', returnData);
+                return returnData;
             } catch (err) {
                 console.error(err);
                 throw err;
