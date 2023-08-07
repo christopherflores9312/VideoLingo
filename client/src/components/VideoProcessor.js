@@ -6,7 +6,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { AuthContext } from './AuthContext'; // if you're using AuthContext.js
 
 const SERVER_URL = process.env.NODE_ENV === 'production' 
-                   ? 'https://videolingo-4a86a4dabd29.herokuapp.com/' 
+                   ? 'https://videolingo-4a86a4dabd29.herokuapp.com' 
                    : 'http://localhost:5001';
 
 function VideoProcessor({ onProcessVideo, video, initialUrl }) {
