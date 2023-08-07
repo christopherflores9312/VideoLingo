@@ -38,9 +38,9 @@ app.get('/download/:video', (req, res) => {
 // Serve static files from the React build
 app.use(express.static(path.join(__dirname, '../client/build')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+// });
 
 
 // connect to MongoDB Atlas database using the connection.js
