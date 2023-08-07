@@ -1,8 +1,9 @@
 export const GET_VIDEOS = `
   query {
     videos {
+      _id
       name
-      processedUrl
+      translatedVideo
     }
   }
 `;

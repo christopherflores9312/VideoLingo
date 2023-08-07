@@ -2,9 +2,10 @@ const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
   type Video {
+    _id: ID!
     url: String
     name: String
-    processedUrl: String
+    translatedVideo: String
     user: ID
   }
 
@@ -28,6 +29,7 @@ const typeDefs = gql`
     processVideo(url: String!, name: String!, userId: ID!): Video
     signup(username: String!, password: String!, email: String!): Auth
     login(username: String!, password: String!): Auth
+    deleteVideo(id: ID!): Video
 }
 `;
 

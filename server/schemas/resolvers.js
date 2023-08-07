@@ -7,6 +7,9 @@ const cleanupFiles = require('../utils/cleanupFiles');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/Users'); // Import the User model
+
+const currentDate = new Date().toISOString().slice(0, 10);
+
 const resolvers = {
     Query: {
         videos: async () => {
@@ -46,13 +49,13 @@ const resolvers = {
                 const translatedText = await speechTranslation(audioFile);
                 const translatedAudio = await textToSpeech(translatedText);
     
-                const uniqueFilename = uuidv4() + '.mp4'; // Use UUID to generate a unique filename
+                const uniqueFilename = `${name.replace(/[^a-z0-9]/gi, '_')}_${currentDate}.mp4`; // Use UUID to generate a unique filename
                 const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio, uniqueFilename); // pass uniqueFilename to addAudioToVideo function
     
                 const videoUrl = `${uniqueFilename}`;
     
                 // Create a new Video document and save it to MongoDB
-                const video = new Video({ url: videoUrl, name: name, user: userId,processedUrl: url });
+                const video = new Video({ url: url, name: name, user: userId, translatedVideo: uniqueFilename });
                 console.log('Saving video document:', video); // Log the video document before saving it
                 await video.save();
     
@@ -95,6 +98,19 @@ const resolvers = {
             const token = jwt.sign({ id: user.id }, '9312');
 
             return { token, user };
+        },
+        deleteVideo: async (_, { id }) => {
+            try {
+                const deletedVideo = await Video.findByIdAndDelete(id);
+                if (deletedVideo) {
+                    return { _id: deletedVideo._id };
+                } else {
+                    throw new Error("Video not found");
+                }
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
         }
     }
 };
