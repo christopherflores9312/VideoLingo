@@ -25,9 +25,11 @@ function YouTubeCard() {
           label="Search"
           variant="outlined"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value)}          
+          style={{ marginBottom: 10 }}
         />
-        <Button variant="contained" color="primary" onClick={handleSearch}>
+        <br />
+        <Button style={{ marginBottom: 10 }} variant="contained" color="primary" onClick={handleSearch}>
           Search
         </Button>
         <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'}}>
