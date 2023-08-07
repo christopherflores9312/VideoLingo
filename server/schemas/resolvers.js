@@ -95,6 +95,19 @@ const resolvers = {
             const token = jwt.sign({ id: user.id }, '9312');
 
             return { token, user };
+        },
+        deleteVideo: async (_, { id }) => {
+            try {
+                const deletedVideo = await Video.findByIdAndDelete(id);
+                if (deletedVideo) {
+                    return { _id: deletedVideo._id };
+                } else {
+                    throw new Error("Video not found");
+                }
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
         }
     }
 };

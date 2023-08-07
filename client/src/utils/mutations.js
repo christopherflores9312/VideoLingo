@@ -5,3 +5,11 @@ export const PROCESS_VIDEO = `
         }
     }
 `;
+
+export const DELETE_VIDEO = `
+  mutation DeleteVideo($id: ID!) {
+    deleteVideo(id: $id) {
+      _id
+    }
+  }
+`;
