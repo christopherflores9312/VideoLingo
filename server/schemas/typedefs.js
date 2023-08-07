@@ -4,7 +4,7 @@ const typeDefs = gql`
   type Video {
     url: String
     name: String
-    processedUrl: String
+    translatedVideo: String
     user: ID
   }
 

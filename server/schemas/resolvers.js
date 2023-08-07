@@ -52,7 +52,7 @@ const resolvers = {
                 const videoUrl = `${uniqueFilename}`;
     
                 // Create a new Video document and save it to MongoDB
-                const video = new Video({ url: videoUrl, name: name, user: userId,processedUrl: url });
+                const video = new Video({ url: url, name: name, user: userId, translatedVideo: uniqueFilename });
                 console.log('Saving video document:', video); // Log the video document before saving it
                 await video.save();
     
