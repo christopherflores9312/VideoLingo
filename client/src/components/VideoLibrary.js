@@ -4,6 +4,10 @@ import { GET_VIDEOS } from '../utils/queries';
 import { DELETE_VIDEO } from '../utils/mutations';
 import { Card, CardContent, Typography, Button } from '@mui/material';
 
+const SERVER_URL = process.env.NODE_ENV === 'production' 
+                   ? 'https://videolingo-4a86a4dabd29.herokuapp.com' 
+                   : 'http://localhost:5001';
+
 function VideoLibrary() {
     const [videos, setVideos] = useState([]);
 
@@ -11,7 +15,7 @@ function VideoLibrary() {
     const handleDelete = async (videoId) => {
         try {
             console.log('Sending delete request for video ID:', videoId);
-            const response = await axios.post('http://localhost:5001/graphql', {
+            const response = await axios.post(`${SERVER_URL}/graphql`, {
                 query: DELETE_VIDEO,
                 variables: { id: videoId }
             });
@@ -26,7 +30,7 @@ function VideoLibrary() {
 
 
     useEffect(() => {
-        axios.post('http://localhost:5001/graphql', { query: GET_VIDEOS })
+        axios.post(`${SERVER_URL}/graphql`, { query: GET_VIDEOS })
             .then(response => {
                 setVideos(response.data.data.videos);
             })
@@ -44,7 +48,7 @@ function VideoLibrary() {
                         <Typography color="textSecondary">{video.url}</Typography> {/* Display the original YouTube URL */}
 
                         {/* Download button */}
-                        <a href={`http://localhost:5001/download/${video.translatedVideo}`} download>
+                        <a href={`${SERVER_URL}/download/${video.translatedVideo}`} download>
                             <Button variant="contained" color="primary">
                                 Download
                             </Button>
