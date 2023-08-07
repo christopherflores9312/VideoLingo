@@ -8,6 +8,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/Users'); // Import the User model
 const fs = require('fs');
+const path = require('path');
+
 
 const currentDate = new Date().toISOString().slice(0, 10);
 
