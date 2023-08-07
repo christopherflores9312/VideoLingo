@@ -16,18 +16,19 @@ function VideoLibrary() {
             });
     }, []);
 
-    const viewVideo = (processedUrl) => {
-        window.location.href = `/home/${encodeURIComponent(processedUrl)}`;
+    const viewVideo = (translatedVideo) => {
+        const videoPath = `http://localhost:5001/download/${translatedVideo}`;
+        window.location.href = `/home/${encodeURIComponent(videoPath)}`;
     };
 
     return (
         <div>
             {videos.map(video => (
-                <Card key={video.processedUrl} style={{ margin: '10px' }}>
+                <Card key={video.translatedVideo} style={{ margin: '10px' }}>
                     <CardContent>
                         <Typography variant="h5">{video.name}</Typography>
-                        <Typography color="textSecondary">{video.processedUrl}</Typography>
-                        <Button onClick={() => viewVideo(video.processedUrl)}>View</Button>
+                        <Typography color="textSecondary">{video.url}</Typography> {/* Display the original YouTube URL */}
+                        <Button onClick={() => viewVideo(video.translatedVideo)}>View</Button>
                     </CardContent>
                 </Card>
             ))}
