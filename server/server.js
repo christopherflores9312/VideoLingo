@@ -19,6 +19,16 @@ const server = new ApolloServer({
   playground: true, // enables the Apollo Server's GraphQL playground
 });
 
+const AWS = require('aws-sdk');
+
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_BUCKET_REGION
+});
+
+const s3 = new AWS.S3();
+
 // Log incoming requests
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
