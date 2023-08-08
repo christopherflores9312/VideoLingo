@@ -1,5 +1,46 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, TextField, Button } from '@mui/material';
+import { Card, CardContent, CardHeader, TextField, Button, styled } from '@mui/material';
+
+const StyledCard = styled(Card)({
+    backgroundColor: '#424242',
+    color: '#e0e0e0',
+    marginTop: '20px',
+    marginBottom: '20px',
+});
+
+const SearchButton = styled(Button)({
+    backgroundColor: '#58cc02',
+    fontFamily: 'MuseoSansRounded1000',
+    color: '#000',
+    '&:hover': {
+        backgroundColor: '#4aa902',
+    }
+});
+
+const StyledTextField = styled(TextField)({
+  '& label.Mui-focused': {
+      color: 'black',
+  },
+  '& .MuiInput-underline:after': {
+      borderBottomColor: 'black',
+  },
+  '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+          borderColor: 'black',
+      },
+      '&:hover fieldset': {
+          borderColor: 'black',
+      },
+      '&.Mui-focused fieldset': {
+          borderColor: 'black',
+      },
+      backgroundColor: '#c3c3c3',
+  },
+  '& .MuiInputBase-input': {
+      color: 'black',
+      fontFamily: 'MuseoSansRounded1000',
+  },
+});
 
 function YouTubeCard() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,10 +57,10 @@ function YouTubeCard() {
   };
 
   return (
-    <Card>
+    <StyledCard>
       <CardHeader title="Search YouTube" />
       <CardContent>
-        <TextField
+        <StyledTextField
           label="Search"
           variant="outlined"
           value={searchTerm}
@@ -27,9 +68,9 @@ function YouTubeCard() {
           style={{ marginBottom: 10 }}
         />
         <br />
-        <Button style={{ marginBottom: 10 }} variant="contained" color="primary" onClick={handleSearch}>
+        <SearchButton style={{ marginBottom: 10 }} variant="contained" onClick={handleSearch}>
           Search
-        </Button>
+        </SearchButton>
         <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'}}>
   {videoList && videoList.map((video, index) => (
     <div key={video.id.videoId || index} style={{flexBasis: '30%', height: '0', paddingBottom: '15%', position: 'relative', marginBottom: '2%'}}>
@@ -46,9 +87,8 @@ function YouTubeCard() {
           ))}
         </div>
       </CardContent>
-    </Card>
+    </StyledCard>
   );
-  
 }
 
 export default YouTubeCard;
