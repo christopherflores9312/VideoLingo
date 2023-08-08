@@ -1,18 +1,40 @@
 import React from 'react';
-import { Card, CardContent, CardHeader } from '@mui/material';
+import { Card, CardContent, CardHeader, styled, CssBaseline } from '@mui/material';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+
+const StyledCard = styled(Card)({
+  backgroundColor: '#424242',
+  fontFamily: 'MuseoSansRounded1000',
+  color: '#58cc02',
+  marginTop: '20px',
+});
+
+const StyledCardHeader = styled(CardHeader)({
+  backgroundColor: '#303030',
+  '& .MuiCardHeader-title': {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+const StyledIcon = styled(PlayCircleOutlineIcon)({
+  marginLeft: '8px',
+  color: '#58cc02',
+});
 
 function VideoPlayerCard({ videoSrc }) {
   return (
-    <Card>
-      <CardHeader
+    <StyledCard>
+      <StyledCardHeader
         title={
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <span style={{ fontFamily: 'MuseoSansRounded1000' }}>
             Translated Video
-            <PlayCircleOutlineIcon style={{ marginLeft: '8px' }} />
-          </div>
+            <StyledIcon />
+          </span>
         }
       />
+
 
       <CardContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <video width="50%" controls>
@@ -21,7 +43,7 @@ function VideoPlayerCard({ videoSrc }) {
         </video>
       </CardContent>
 
-    </Card>
+    </StyledCard>
   );
 }
 

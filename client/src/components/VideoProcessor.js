@@ -27,7 +27,7 @@ const refinedDarkTheme = createTheme({
             main: '#f48fb1',  // Soft pink
         },
         background: {
-            default: '#303030', // Dark grey, not black
+            default: '#000', // Dark grey, not black
             paper: '#424242',   // Slightly lighter grey
         },
         text: {
@@ -35,6 +35,13 @@ const refinedDarkTheme = createTheme({
         },
     },
 });
+
+const StyledDiv = styled('div')({
+    backgroundColor: '#424242',
+    color: '#e0e0e0',
+    padding: '20px',
+    borderRadius: '5px',
+  });
 
 const CustomTextField = styled(TextField)({
     marginBottom: '10px',
@@ -92,6 +99,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
     return (
         <ThemeProvider theme={refinedDarkTheme}>
             <CssBaseline />
+            <StyledDiv>
             <div style={{ padding: '20px' }}>
                 <Fade in={true} timeout={500}>
                     <CustomTextField
@@ -133,6 +141,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
                 }
                 {loading && <LinearProgress />}
             </div>
+            </StyledDiv>
         </ThemeProvider>
     );
 }

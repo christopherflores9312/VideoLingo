@@ -23,7 +23,7 @@ const refinedDarkTheme = createTheme({
             main: '#f48fb1',  // Soft pink
         },
         background: {
-            default: '#303030', // Dark grey, not black
+            default: '#000', // Dark grey, not black
             paper: '#424242',   // Slightly lighter grey
         },
         text: {
@@ -95,7 +95,7 @@ function VideoLibrary() {
 
     return (
         <ThemeProvider theme={refinedDarkTheme}>
-                        <CssBaseline />
+            <CssBaseline />
 
             <div>
                 {videos.map(video => {
