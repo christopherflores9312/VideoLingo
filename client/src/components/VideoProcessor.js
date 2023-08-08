@@ -134,6 +134,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
                             variant="contained"
                             href={`${video}`}
                             download
+                            disabled={loading}
                         >
                             Download Video
                         </DownloadButton>
