@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, styled, CssBaseline } from '@mui/material';
+import { Card, CardContent, CardHeader, styled } from '@mui/material';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
 const StyledCard = styled(Card)({
