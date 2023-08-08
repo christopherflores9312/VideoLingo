@@ -14,6 +14,8 @@ import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient';
 import AuthDialog from './components/AuthDialog';  // Import AuthDialog component
 import VideoLibrary from './components/VideoLibrary';  // Import VideoLibrary component
+import ContactUs from './components/ContactUs';
+import About from './components/About';
 
 const SERVER_URL = process.env.NODE_ENV === 'production' 
                    ? 'https://videolingo-4a86a4dabd29.herokuapp.com' 
@@ -44,7 +46,7 @@ function App() {
                 <Route path="/login" element={<Login handleClose={handleClose} />} />
                 <Route path="/signup" element={<Signup handleClose={handleClose} />} />
                 <Route path="/process" element={<ProtectedContent showDialog={setIsAuthDialogOpen} currentSection={currentSection} />} />
-<Route path="/" element={<ProtectedContent showDialog={setIsAuthDialogOpen} currentSection={currentSection} />} />
+                <Route path="/" element={<ProtectedContent showDialog={setIsAuthDialogOpen} currentSection={currentSection} />} />
               </Routes>
             </div>
             <Footer />
@@ -78,7 +80,13 @@ const ProtectedContent = ({ showDialog, currentSection }) => {
    if (currentSection === 'My Video Library') {
     return <VideoLibrary />;
   }
+  if (currentSection === 'Contact Us') {
+    return <ContactUs />;
+  }
 
+  if (currentSection === 'About Video Lingo') {
+    return <About />;
+  }
   // If user is not null, show the protected content
   return (
     <>
