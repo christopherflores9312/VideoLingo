@@ -61,9 +61,10 @@ const resolvers = {
                 const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio, uniqueFilename);
                 console.log('Final video:', finalVideo);
 
-                const videoUrl = `${uniqueFilename}`;
+                const videoUrl = `https://videolingo.s3.us-west-1.amazonaws.com/videos/${uniqueFilename}`;
 
-                const video = new Video({ url: url, name: name, user: userId, translatedVideo: uniqueFilename });
+
+                const video = new Video({ url: url, name: name, user: userId, translatedVideo: videoUrl });
                 console.log('Saving video document:', video);
                 await video.save();
 
