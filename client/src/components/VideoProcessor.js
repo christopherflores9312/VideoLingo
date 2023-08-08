@@ -80,6 +80,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
     }, [initialUrl]);
 
     const processVideo = (videoUrl = url) => {
+        onProcessVideo(null);  // Reset the video state
         const variables = { url: videoUrl, name: videoName, userId: user.id };  // Include userId
         setLoading(true);
         console.log('Sending video processing request with variables:', variables); //remember to remove
