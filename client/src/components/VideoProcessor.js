@@ -73,7 +73,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
                 <Button
                     variant="contained"
                     color="secondary"
-                    href={`${SERVER_URL}/${video}`}
+                    href={`${SERVER_URL}/download/${video}`}
                     download
                 >
                     Download Video
