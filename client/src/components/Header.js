@@ -7,13 +7,19 @@ import { styled } from '@mui/system';
 
 const HeaderTitle = styled(Typography)({
   fontFamily: 'MuseoSansRounded1000',
-  fontSize: '2.5rem',
+  fontSize: '3.5rem',
   color: '#58cc02',
   margin: 0,
   padding: 0,
   textAlign: 'left',
   marginBottom: '1rem',
   flexGrow: 1,
+  textShadow: `
+    -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000
+  `
 });
 
 function Header({ setCurrentSection }) {

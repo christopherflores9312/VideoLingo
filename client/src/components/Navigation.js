@@ -7,7 +7,7 @@ import { styled } from '@mui/system';
 const PrimaryButton = styled(Button)({
   fontFamily: 'MuseoSansRounded1000',
   backgroundColor: '#58cc02',
-  color: '#ffffff',
+  color: '#000',
   border: 'solid 1px #ffffff',
   padding: '10px 20px',
   borderRadius: '5px',
