@@ -91,7 +91,7 @@ const ProtectedContent = ({ showDialog, currentSection }) => {
   return (
     <>
       <VideoProcessor onProcessVideo={setVideo} video={video} />
-      {video && <VideoPlayerCard videoSrc={`${SERVER_URL}/download/${video}`} />}
+      {video && <VideoPlayerCard videoSrc={`${video}`} />}
       <br />
       <YouTubeCard />
     </>

@@ -8,6 +8,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/Users'); // Import the User model
 const fs = require('fs');
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
 
 const currentDate = new Date().toISOString().slice(0, 10);
 
@@ -61,9 +63,10 @@ const resolvers = {
                 const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio, uniqueFilename);
                 console.log('Final video:', finalVideo);
 
-                const videoUrl = `${uniqueFilename}`;
+                const videoUrl = `https://videolingo.s3.us-west-1.amazonaws.com/videos/${uniqueFilename}`;
 
-                const video = new Video({ url: url, name: name, user: userId, translatedVideo: uniqueFilename });
+
+                const video = new Video({ url: url, name: name, user: userId, translatedVideo: videoUrl });
                 console.log('Saving video document:', video);
                 await video.save();
 
@@ -116,12 +119,18 @@ const resolvers = {
                     throw new Error("Video not found");
                 }
                 
-                // Construct the path to the video file
-                const videoPath = `output/${videoToDelete.translatedVideo}`;
+                // Construct the S3 key (filename) for the video
+                const videoS3Key = videoToDelete.translatedVideo;
                 
-                // Delete the video file from the filesystem
-                fs.unlinkSync(videoPath);  // Using synchronous unlink for simplicity
-        
+                // Delete the video from S3
+                const params = {
+                    Bucket: 'videolingo', // Your S3 bucket name
+                    Key: videoS3Key
+                };
+
+                await s3.deleteObject(params).promise();
+                console.log('Video deleted from S3:', videoS3Key);
+                
                 // Delete the video entry from the database
                 await Video.findByIdAndDelete(id);
                 
@@ -131,7 +140,7 @@ const resolvers = {
                 console.error(err);
                 throw err;
             }
-        }
+        }    
     }
 };
 

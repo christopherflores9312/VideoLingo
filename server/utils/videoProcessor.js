@@ -4,6 +4,35 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const outputDir = 'output';  // Assuming 'output' is the directory you save files to
+const AWS = require('aws-sdk');
+
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_BUCKET_REGION
+});
+
+const s3 = new AWS.S3();
+
+function uploadToS3(filePath, key) {
+    return new Promise((resolve, reject) => {
+        const fileStream = fs.createReadStream(filePath);
+        const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: key,
+            Body: fileStream
+        };
+
+        s3.upload(params, (err, data) => {
+            if (err) {
+                console.error('Error uploading file to S3:', err);
+                reject(err);
+            } else {
+                resolve(data.Location);  // Return the URL of the uploaded file
+            }
+        });
+    });
+}
 
 
 function downloadVideo(url) {
@@ -47,6 +76,7 @@ function extractAudio(videoData) {
 function addAudioToVideo(videoData, audioFile, filename) {
     return new Promise((resolve, reject) => {
         const outputPath = `output/${filename}`;
+        const s3Key = `videos/${filename}`;  // Adjust as needed
 
         ffmpeg(videoData.path)
             .input(audioFile)
@@ -54,20 +84,29 @@ function addAudioToVideo(videoData, audioFile, filename) {
             .save(outputPath)
             .on('end', function () {
                 console.log('Finished processing video!');
-                // Check for the existence of the output file here
-                if (fs.existsSync(outputPath)) {
-                    console.log(`File was saved at: ${outputPath}`);
-                } else {
-                    console.log(`File was NOT found at: ${outputPath}`);
-                }
-                resolve(outputPath);
+
+                // Upload to S3
+                uploadToS3(outputPath, s3Key)
+                    .then(s3Url => {
+                        // Delete local files if necessary
+                        fs.unlinkSync(outputPath);
+                        fs.unlinkSync(videoData.path);
+                        fs.unlinkSync(audioFile);
+
+                        resolve(s3Url);  // Return the S3 URL
+                    })
+                    .catch(err => {
+                        console.error('Error occurred while uploading to S3:', err);
+                        reject(err);
+                    });
             })
             .on('error', function (err) {
-                console.error('Error occurred: ' + err.message);
+                console.error('Error occurred:', err.message);
                 reject(err);
             });
     });
 }
+
 
 
 module.exports = {
