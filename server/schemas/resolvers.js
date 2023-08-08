@@ -57,7 +57,7 @@ const resolvers = {
                 const translatedAudio = await textToSpeech(translatedText);
                 console.log('Text to speech done:', translatedAudio);
 
-                const uniqueFilename = `${name.replace(/[^a-z0-9]/gi, '_')}_${uuidv4()}_${currentDate}.mp4`;
+                const uniqueFilename = `${(name || 'video').replace(/[^a-z0-9]/gi, '_')}_${uuidv4()}_${currentDate}.mp4`;
                 const finalVideo = await videoProcessor.addAudioToVideo(videoFile, translatedAudio, uniqueFilename);
                 console.log('Final video:', finalVideo);
 
