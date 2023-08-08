@@ -3,6 +3,10 @@ import axios from 'axios';
 import { GET_VIDEOS } from '../utils/queries';
 import { DELETE_VIDEO } from '../utils/mutations';
 import { Card, CardContent, Typography, Button } from '@mui/material';
+import VideoPlayerCard from './VideoPlayerCard';  // Adjust the path accordingly
+
+// Define the S3 bucket URL
+const S3_BUCKET_URL = "https://videolingo.s3.us-west-1.amazonaws.com/videos/";
 
 const SERVER_URL = process.env.NODE_ENV === 'production' 
                    ? 'https://videolingo-4a86a4dabd29.herokuapp.com' 
@@ -41,24 +45,34 @@ function VideoLibrary() {
 
     return (
         <div>
-            {videos.map(video => (
-                <Card key={video.translatedVideo} style={{ margin: '10px' }}>
-                    <CardContent>
-                        <Typography variant="h5">{video.name}</Typography>
-                        <Typography color="textSecondary">{video.url}</Typography> {/* Display the original YouTube URL */}
-
-                        {/* Download button */}
-                        <a href={`${SERVER_URL}/download/${video.translatedVideo}`} download>
-                            <Button variant="contained" color="primary">
-                                Download
-                            </Button>
-                        </a>
+            {videos.map(video => {
+                // Construct the full S3 URL for the video
+                const videoS3Url = `${video.translatedVideo}`;
+    
+                return (
+                    <Card key={video._id} style={{ margin: '10px' }}>
+                        <CardContent>
+                            <Typography variant="h5">{video.name}</Typography>
+                            <Typography color="textSecondary">{video.url}</Typography> {/* Display the original YouTube URL */}
+                            
+                            {/* Video Playback */}
+                            <VideoPlayerCard videoSrc={videoS3Url} />
+    
+                            {/* Download button */}
+                            <a href={videoS3Url} download>
+                                <Button variant="contained" color="primary">
+                                    Download
+                                </Button>
+                            </a>
+    
+                            {/* Delete button */}
                             <Button variant="contained" color="secondary" onClick={() => handleDelete(video._id)}>
                                 Delete
                             </Button>
-                    </CardContent>
-                </Card>
-            ))}
+                        </CardContent>
+                    </Card>
+                );
+            })}
         </div>
     );
 }
