@@ -9,7 +9,8 @@ import {
     CssBaseline,
     ThemeProvider,
     createTheme,
-    Fade
+    Fade,
+    styled
 } from '@mui/material';
 
 const SERVER_URL = process.env.NODE_ENV === 'production'
@@ -35,6 +36,27 @@ const refinedDarkTheme = createTheme({
     },
 });
 
+const CustomTextField = styled(TextField)({
+    marginBottom: '10px',
+});
+
+const TranslateButton = styled(Button)({
+    marginRight: '10px',
+    fontFamily: 'MuseoSansRounded1000',
+    backgroundColor: '#58cc02',
+    '&:hover': {
+        backgroundColor: '#4aa902',
+    }
+});
+
+const DownloadButton = styled(Button)({
+    backgroundColor: '#1976d2',
+    fontFamily: 'MuseoSansRounded1000',
+    color: '#ffffff',
+    '&:hover': {
+        backgroundColor: '#222',
+    }
+});
 
 function VideoProcessor({ onProcessVideo, video, initialUrl }) {
     const [url, setUrl] = useState('');
@@ -72,46 +94,41 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
             <CssBaseline />
             <div style={{ padding: '20px' }}>
                 <Fade in={true} timeout={500}>
-                    <TextField
+                    <CustomTextField
                         fullWidth
                         label="Video Name"
                         variant="outlined"
                         value={videoName}
                         onChange={e => setVideoName(e.target.value)}
-                        style={{ marginBottom: 10 }}
                     />
                 </Fade>
                 <Fade in={true} timeout={1000}>
-                    <TextField
+                    <CustomTextField
                         fullWidth
                         label="Video URL"
                         variant="outlined"
                         value={url}
                         onChange={e => setUrl(e.target.value)}
-                        style={{ marginBottom: 10 }}
                     />
                 </Fade>
                 <Fade in={true} timeout={1500}>
-                    <Button
+                    <TranslateButton
                         variant="contained"
-                        color="primary"
-                        style={{ marginRight: 10 }}
                         onClick={() => processVideo()}
                         disabled={loading}
                     >
                         Translate Video
-                    </Button>
+                    </TranslateButton>
                 </Fade>
                 {video &&
                     <Fade in={true} timeout={2000}>
-                        <Button
+                        <DownloadButton
                             variant="contained"
-                            color="secondary"
                             href={`${video}`}
                             download
                         >
                             Download Video
-                        </Button>
+                        </DownloadButton>
                     </Fade>
                 }
                 {loading && <LinearProgress />}
