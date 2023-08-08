@@ -103,7 +103,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
                     <Fade in={true} timeout={500}>
                         <CustomTextField
                             fullWidth
-                            label="Video Name"
+                            label="Name your video"
                             variant="outlined"
                             value={videoName}
                             onChange={e => setVideoName(e.target.value)}
@@ -112,7 +112,7 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
                     <Fade in={true} timeout={1000}>
                         <CustomTextField
                             fullWidth
-                            label="Video URL"
+                            label="YouTube Video URL"
                             variant="outlined"
                             value={url}
                             onChange={e => setUrl(e.target.value)}
