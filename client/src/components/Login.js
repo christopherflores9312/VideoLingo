@@ -45,7 +45,7 @@ const Login = ({ handleClose }) => {
                 console.log(response.data.login);
                 const { success } = await signIn(null, null, response.data.login.token);  // Store JWT in AuthContext and local storage
                 if (success) {
-                    navigate('/process');  // Navigate to /process after successful sign in
+                    navigate('/');  // Navigate to /process after successful sign in
                 }
             } catch (error) {
                 console.error(error);

@@ -45,7 +45,6 @@ function App() {
               <Routes>
                 <Route path="/login" element={<Login handleClose={handleClose} />} />
                 <Route path="/signup" element={<Signup handleClose={handleClose} />} />
-                <Route path="/process" element={<ProtectedContent showDialog={setIsAuthDialogOpen} currentSection={currentSection} />} />
                 <Route path="/" element={<ProtectedContent showDialog={setIsAuthDialogOpen} currentSection={currentSection} />} />
               </Routes>
             </div>

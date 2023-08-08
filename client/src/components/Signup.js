@@ -47,7 +47,7 @@ const Signup = ({ handleClose }) => {
                 console.log(response.data.signup);
                 const { success } = await signIn(null, null, response.data.signup.token);  // Store JWT in AuthContext and local storage
                 if (success) {
-                    navigate('/process');  // Navigate to /process after successful sign up
+                    navigate('/');  // Navigate to /process after successful sign up
                 }
             } catch (error) {
                 console.error(error);
