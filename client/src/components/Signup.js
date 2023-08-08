@@ -44,7 +44,6 @@ const Signup = ({ handleClose }) => {
             setLoading(true);  // Set loading to true before calling signIn
             try {
                 const response = await signupMutation({ variables: values });
-                console.log(response.data.signup);
                 const { success } = await signIn(null, null, response.data.signup.token);  // Store JWT in AuthContext and local storage
                 if (success) {
                     navigate('/');  // Navigate to /process after successful sign up

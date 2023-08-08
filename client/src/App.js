@@ -16,10 +16,18 @@ import AuthDialog from './components/AuthDialog';  // Import AuthDialog componen
 import VideoLibrary from './components/VideoLibrary';  // Import VideoLibrary component
 import ContactUs from './components/ContactUs';
 import About from './components/About';
+import { styled } from '@mui/system';
 
-const SERVER_URL = process.env.NODE_ENV === 'production' 
-                   ? 'https://videolingo-4a86a4dabd29.herokuapp.com' 
-                   : 'http://localhost:5001';
+const MainContainer = styled(Container)({
+  display: 'flex',
+  flexDirection: 'column',
+  minHeight: '100vh',
+});
+
+const ContentContainer = styled('div')({
+  flex: 1,
+});
+
 
 function App() {
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
@@ -34,21 +42,24 @@ function App() {
       <AuthProvider handleClose={handleClose}>
         <Router>
           <Container component="main" maxWidth="lg">
-            <CssBaseline />
-            <Header setCurrentSection={setCurrentSection} /> {/* Pass the function as a prop here */}
-            <AuthContext.Consumer>
-              {({ user }) => (
-                <AuthDialog open={isAuthDialogOpen} handleClose={handleClose} user={user} />
-              )}
-            </AuthContext.Consumer>
-            <div className="App-content">
-              <Routes>
-                <Route path="/login" element={<Login handleClose={handleClose} />} />
-                <Route path="/signup" element={<Signup handleClose={handleClose} />} />
-                <Route path="/" element={<ProtectedContent showDialog={setIsAuthDialogOpen} currentSection={currentSection} />} />
-              </Routes>
-            </div>
-            <Footer />
+            <MainContainer component="main" maxWidth="lg">
+
+              <CssBaseline />
+              <Header setCurrentSection={setCurrentSection} /> {/* Pass the function as a prop here */}
+              <AuthContext.Consumer>
+                {({ user }) => (
+                  <AuthDialog open={isAuthDialogOpen} handleClose={handleClose} user={user} />
+                )}
+              </AuthContext.Consumer>
+              <ContentContainer className="App-content">
+                <Routes>
+                  <Route path="/login" element={<Login handleClose={handleClose} />} />
+                  <Route path="/signup" element={<Signup handleClose={handleClose} />} />
+                  <Route path="/" element={<ProtectedContent showDialog={setIsAuthDialogOpen} currentSection={currentSection} />} />
+                </Routes>
+              </ContentContainer>
+              <Footer />
+            </MainContainer>
           </Container>
         </Router>
       </AuthProvider>
@@ -74,8 +85,8 @@ const ProtectedContent = ({ showDialog, currentSection }) => {
     return <div>Loading...</div>;
   }
 
-   // Conditional rendering based on the currentSection
-   if (currentSection === 'My Video Library') {
+  // Conditional rendering based on the currentSection
+  if (currentSection === 'My Video Library') {
     return <VideoLibrary />;
   }
   if (currentSection === 'Contact Us') {

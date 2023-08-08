@@ -42,7 +42,6 @@ const Login = ({ handleClose }) => {
             setLoading(true);  // Set loading to true before calling signIn
             try {
                 const response = await loginMutation({ variables: values });
-                console.log(response.data.login);
                 const { success } = await signIn(null, null, response.data.login.token);  // Store JWT in AuthContext and local storage
                 if (success) {
                     navigate('/');  // Navigate to /process after successful sign in
