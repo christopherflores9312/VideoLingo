@@ -40,9 +40,7 @@ export const AuthProvider = ({ children, handleClose}) => {
           variables: { token: authToken },
         });
         setUser(data.verifyUser);
-        console.log('User set in initializeAuth:', data.verifyUser);
       } catch (error) {
-        console.error('Error in initializeAuth:', error);
         // Clear the token if it's invalid
         setAuthToken(null);
         localStorage.removeItem('authToken');

@@ -62,7 +62,6 @@ function App() {
 const ProtectedContent = ({ showDialog, currentSection }) => {
   const { user, loading } = useContext(AuthContext);
   const [video, setVideo] = useState(null);
-  console.log('User in ProtectedContent:', user);
 
   useEffect(() => {
     // If user is null, open the authentication dialog
