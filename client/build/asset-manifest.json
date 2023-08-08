@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/static/css/main.0e4f5dcf.css",
-    "main.js": "/static/js/main.9aa3e808.js",
+    "main.js": "/static/js/main.fd891a50.js",
     "static/js/787.c4e7f8f9.chunk.js": "/static/js/787.c4e7f8f9.chunk.js",
     "static/media/MuseoSansRounded1000.otf": "/static/media/MuseoSansRounded1000.bcc4445ff4efa36736a0.otf",
     "index.html": "/index.html",
     "main.0e4f5dcf.css.map": "/static/css/main.0e4f5dcf.css.map",
-    "main.9aa3e808.js.map": "/static/js/main.9aa3e808.js.map",
+    "main.fd891a50.js.map": "/static/js/main.fd891a50.js.map",
     "787.c4e7f8f9.chunk.js.map": "/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0e4f5dcf.css",
-    "static/js/main.9aa3e808.js"
+    "static/js/main.fd891a50.js"
   ]
 }
