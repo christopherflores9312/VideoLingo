@@ -41,7 +41,7 @@ const StyledDiv = styled('div')({
     color: '#e0e0e0',
     padding: '20px',
     borderRadius: '5px',
-  });
+});
 
 const CustomTextField = styled(TextField)({
     marginBottom: '10px',
@@ -101,48 +101,48 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
         <ThemeProvider theme={refinedDarkTheme}>
             <CssBaseline />
             <StyledDiv>
-            <div style={{ padding: '20px' }}>
-                <Fade in={true} timeout={500}>
-                    <CustomTextField
-                        fullWidth
-                        label="Video Name"
-                        variant="outlined"
-                        value={videoName}
-                        onChange={e => setVideoName(e.target.value)}
-                    />
-                </Fade>
-                <Fade in={true} timeout={1000}>
-                    <CustomTextField
-                        fullWidth
-                        label="Video URL"
-                        variant="outlined"
-                        value={url}
-                        onChange={e => setUrl(e.target.value)}
-                    />
-                </Fade>
-                <Fade in={true} timeout={1500}>
-                    <TranslateButton
-                        variant="contained"
-                        onClick={() => processVideo()}
-                        disabled={loading}
-                    >
-                        Translate Video
-                    </TranslateButton>
-                </Fade>
-                {video &&
-                    <Fade in={true} timeout={2000}>
-                        <DownloadButton
+                <div style={{ padding: '20px' }}>
+                    <Fade in={true} timeout={500}>
+                        <CustomTextField
+                            fullWidth
+                            label="Video Name"
+                            variant="outlined"
+                            value={videoName}
+                            onChange={e => setVideoName(e.target.value)}
+                        />
+                    </Fade>
+                    <Fade in={true} timeout={1000}>
+                        <CustomTextField
+                            fullWidth
+                            label="Video URL"
+                            variant="outlined"
+                            value={url}
+                            onChange={e => setUrl(e.target.value)}
+                        />
+                    </Fade>
+                    <Fade in={true} timeout={1500}>
+                        <TranslateButton
                             variant="contained"
-                            href={`${video}`}
-                            download
+                            onClick={() => processVideo()}
                             disabled={loading}
                         >
-                            Download Video
-                        </DownloadButton>
+                            {loading ? 'Translating Video...' : 'Translate Video'}
+                        </TranslateButton>
                     </Fade>
-                }
-                {loading && <LinearProgress />}
-            </div>
+                    {video &&
+                        <Fade in={true} timeout={2000}>
+                            <DownloadButton
+                                variant="contained"
+                                href={`${video}`}
+                                download
+                                disabled={loading}
+                            >
+                                Download Video
+                            </DownloadButton>
+                        </Fade>
+                    }
+                    {loading && <LinearProgress style={{ marginTop: '20px' }} />}
+                </div>
             </StyledDiv>
         </ThemeProvider>
     );

@@ -62,6 +62,15 @@ const DeleteButton = styled(Button)({
     }
 });
 
+const ButtonContainer = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '1rem',  // To provide a little spacing between buttons
+    marginTop: '1rem',
+});
+
+
 function VideoLibrary() {
     const [videos, setVideos] = useState([]);
 
@@ -110,18 +119,19 @@ function VideoLibrary() {
 
                                 {/* Video Playback */}
                                 <VideoPlayerCard videoSrc={videoS3Url} />
+                                <ButtonContainer>
+                                    {/* Download button */}
+                                    <a href={videoS3Url} download style={{ textDecoration: 'none' }}>
+                                        <DownloadButton variant="contained">
+                                            Download
+                                        </DownloadButton>
+                                    </a>
 
-                                {/* Download button */}
-                                <a href={videoS3Url} download style={{ textDecoration: 'none' }}>
-                                    <DownloadButton variant="contained">
-                                        Download
-                                    </DownloadButton>
-                                </a>
-
-                                {/* Delete button */}
-                                <DeleteButton variant="contained" onClick={() => handleDelete(video._id)}>
-                                    Delete
-                                </DeleteButton>
+                                    {/* Delete button */}
+                                    <DeleteButton variant="contained" onClick={() => handleDelete(video._id)}>
+                                        Delete
+                                    </DeleteButton>
+                                </ButtonContainer>
                             </CardContent>
                         </StyledCard>
                     );
