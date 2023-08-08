@@ -75,7 +75,6 @@ function ContactUs() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Contact Us Form Submitted:', formData);
 
     alert('Thank you for contacting us! Your message has been received.');
     setFormData({ name: '', email: '', message: '' });

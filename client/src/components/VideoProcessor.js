@@ -83,11 +83,9 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
         onProcessVideo(null);  // Reset the video state
         const variables = { url: videoUrl, name: videoName, userId: user.id };  // Include userId
         setLoading(true);
-        console.log('Sending video processing request with variables:', variables); //remember to remove
         axios.post(`${SERVER_URL}/graphql`, { query: PROCESS_VIDEO, variables })
             .then(response => {
                 const videoUrl = response.data.data.processVideo.url;
-                console.log('Received server response:', response.data); //remember to remove
                 onProcessVideo(videoUrl);
                 setLoading(false);
             })

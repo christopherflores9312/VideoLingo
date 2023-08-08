@@ -77,7 +77,6 @@ function VideoLibrary() {
     // Function to handle video deletion
     const handleDelete = async (videoId) => {
         try {
-            console.log('Sending delete request for video ID:', videoId);
             const response = await axios.post(`${SERVER_URL}/graphql`, {
                 query: DELETE_VIDEO,
                 variables: { id: videoId }
