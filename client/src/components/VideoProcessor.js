@@ -1,13 +1,40 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Button, TextField } from '@mui/material';
 import { PROCESS_VIDEO } from '../utils/mutations';
 import LinearProgress from '@mui/material/LinearProgress';
 import { AuthContext } from './AuthContext'; // if you're using AuthContext.js
+import {
+    Button,
+    TextField,
+    CssBaseline,
+    ThemeProvider,
+    createTheme,
+    Fade
+} from '@mui/material';
 
-const SERVER_URL = process.env.NODE_ENV === 'production' 
-                   ? 'https://videolingo-4a86a4dabd29.herokuapp.com' 
-                   : 'http://localhost:5001';
+const SERVER_URL = process.env.NODE_ENV === 'production'
+    ? 'https://videolingo-4a86a4dabd29.herokuapp.com'
+    : 'http://localhost:5001';
+
+const refinedDarkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+        primary: {
+            main: '#90caf9',  // Soft blue
+        },
+        secondary: {
+            main: '#f48fb1',  // Soft pink
+        },
+        background: {
+            default: '#303030', // Dark grey, not black
+            paper: '#424242',   // Slightly lighter grey
+        },
+        text: {
+            primary: '#e0e0e0',  // Soft white
+        },
+    },
+});
+
 
 function VideoProcessor({ onProcessVideo, video, initialUrl }) {
     const [url, setUrl] = useState('');
@@ -41,47 +68,57 @@ function VideoProcessor({ onProcessVideo, video, initialUrl }) {
     }
 
     return (
-        <div>
-            <TextField
-                fullWidth
-                label="Video Name"
-                variant="outlined"
-                value={videoName}
-                onChange={e => setVideoName(e.target.value)}
-                style={{ marginBottom: 10 }}
-            />
-            <TextField
-                fullWidth
-                label="Video URL"
-                variant="outlined"
-                value={url}
-                onChange={e => setUrl(e.target.value)}
-                style={{ marginBottom: 10 }}
-            />
-
-            <Button
-                variant="contained"
-                color="primary"
-                style={{ marginRight: 10 }}
-                onClick={() => processVideo()}
-                disabled={loading}
-            >
-                Translate Video
-            </Button>
-            
-            {video &&
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    href={`${video}`}
-                    download
-                >
-                    Download Video
-                </Button>
-            }
-            {loading && <LinearProgress />}
-        </div>
+        <ThemeProvider theme={refinedDarkTheme}>
+            <CssBaseline />
+            <div style={{ padding: '20px' }}>
+                <Fade in={true} timeout={500}>
+                    <TextField
+                        fullWidth
+                        label="Video Name"
+                        variant="outlined"
+                        value={videoName}
+                        onChange={e => setVideoName(e.target.value)}
+                        style={{ marginBottom: 10 }}
+                    />
+                </Fade>
+                <Fade in={true} timeout={1000}>
+                    <TextField
+                        fullWidth
+                        label="Video URL"
+                        variant="outlined"
+                        value={url}
+                        onChange={e => setUrl(e.target.value)}
+                        style={{ marginBottom: 10 }}
+                    />
+                </Fade>
+                <Fade in={true} timeout={1500}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginRight: 10 }}
+                        onClick={() => processVideo()}
+                        disabled={loading}
+                    >
+                        Translate Video
+                    </Button>
+                </Fade>
+                {video &&
+                    <Fade in={true} timeout={2000}>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            href={`${video}`}
+                            download
+                        >
+                            Download Video
+                        </Button>
+                    </Fade>
+                }
+                {loading && <LinearProgress />}
+            </div>
+        </ThemeProvider>
     );
 }
+
 
 export default VideoProcessor;
