@@ -3,15 +3,26 @@ import Navigation from './Navigation';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import styles from '../styles/header.module.css';  // Import the CSS module
+import { styled } from '@mui/system';
+
+const HeaderTitle = styled(Typography)({
+  fontFamily: 'MuseoSansRounded1000',
+  fontSize: '2.5rem',
+  color: '#58cc02',
+  margin: 0,
+  padding: 0,
+  textAlign: 'left',
+  marginBottom: '1rem',
+  flexGrow: 1,
+});
 
 function Header({ setCurrentSection }) {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" className={styles.headerTitle}>
+        <HeaderTitle variant="h6">
           Video Lingo
-        </Typography>
+        </HeaderTitle>
         <Navigation setCurrentSection={setCurrentSection} />
       </Toolbar>
     </AppBar>
