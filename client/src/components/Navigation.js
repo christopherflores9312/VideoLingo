@@ -34,7 +34,17 @@ const SecondaryButton = styled(Button)({
 
 
 function Navigation({ setCurrentSection }) {
-  const { logout } = useContext(AuthContext);
+  const auth = useContext(AuthContext);
+  
+  const isAuthenticated = auth.user && auth.user.id && auth.user.username;
+
+  const handleAuthClick = () => {
+    if (isAuthenticated) {
+      auth.logout();
+    } else {
+      // You might want to navigate to the login page or handle the login action here
+    }
+  };
 
   return (
     <div>
@@ -47,8 +57,8 @@ function Navigation({ setCurrentSection }) {
           {section}
         </PrimaryButton>
       ))}
-      <SecondaryButton color="inherit" onClick={logout}>
-        Logout
+      <SecondaryButton color="inherit" onClick={handleAuthClick}>
+        {isAuthenticated ? 'Logout' : 'Login'}
       </SecondaryButton>
     </div>
   );
